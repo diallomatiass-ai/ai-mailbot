@@ -1,4 +1,5 @@
 import Sidebar from '@/components/Sidebar'
+import CommandChat from '@/components/CommandChat'
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -7,6 +8,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <main className="flex-1 overflow-auto">
         {children}
       </main>
+      <CommandChat />
     </div>
   )
 }

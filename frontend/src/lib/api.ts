@@ -84,6 +84,13 @@ export const api = {
   deleteKnowledge: (id: string) =>
     fetchApi(`/knowledge/${id}`, { method: 'DELETE' }),
 
+  // Chat / AI Command
+  sendCommand: (message: string, confirm?: boolean, pendingAction?: Record<string, unknown>) =>
+    fetchApi('/chat', {
+      method: 'POST',
+      body: JSON.stringify({ message, confirm: confirm ?? false, pending_action: pendingAction ?? null }),
+    }),
+
   // Accounts
   listAccounts: () => fetchApi('/webhooks/accounts'),
   connectGmail: () => fetchApi('/webhooks/gmail/connect'),
