@@ -1,108 +1,87 @@
 'use client'
 
+import { useTranslation } from '@/lib/i18n'
+
 const categoryColors: Record<string, string> = {
-  inquiry: 'bg-blue-100 text-blue-700',
-  complaint: 'bg-red-100 text-red-700',
-  order: 'bg-green-100 text-green-700',
-  support: 'bg-yellow-100 text-yellow-700',
-  spam: 'bg-gray-100 text-gray-500',
-  other: 'bg-purple-100 text-purple-700',
+  inquiry: 'bg-blue-50 dark:bg-blue-500/15 text-blue-600 dark:text-blue-400',
+  complaint: 'bg-red-50 dark:bg-red-500/15 text-red-600 dark:text-red-400',
+  order: 'bg-green-50 dark:bg-green-500/15 text-green-600 dark:text-green-400',
+  support: 'bg-amber-50 dark:bg-amber-500/15 text-amber-600 dark:text-amber-400',
+  spam: 'bg-slate-100 dark:bg-zinc-700/50 text-slate-500 dark:text-zinc-500',
+  other: 'bg-purple-50 dark:bg-purple-500/15 text-purple-600 dark:text-purple-400',
 }
 
 const urgencyDots: Record<string, string> = {
-  high: 'bg-red-500',
-  medium: 'bg-yellow-500',
-  low: 'bg-green-500',
+  high: 'bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.5)]',
+  medium: 'bg-amber-500 shadow-[0_0_6px_rgba(245,158,11,0.5)]',
+  low: 'bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.5)]',
 }
 
-function timeAgo(dateStr: string | null): string {
+function timeAgo(dateStr: string | null, locale: string): string {
   if (!dateStr) return ''
   const diff = Date.now() - new Date(dateStr).getTime()
   const mins = Math.floor(diff / 60000)
-  if (mins < 1) return 'Nu'
+  if (mins < 1) return locale === 'da' ? 'Nu' : 'Now'
   if (mins < 60) return `${mins}m`
   const hours = Math.floor(mins / 60)
-  if (hours < 24) return `${hours}t`
+  if (hours < 24) return locale === 'da' ? `${hours}t` : `${hours}h`
   const days = Math.floor(hours / 24)
   return `${days}d`
 }
 
 interface Email {
-  id: string
-  from_address: string
-  from_name: string | null
-  subject: string | null
-  received_at: string | null
-  is_read: boolean
-  is_replied: boolean
-  category: string | null
-  urgency: string | null
-  has_suggestion: boolean
+  id: string; from_address: string; from_name: string | null; subject: string | null
+  received_at: string | null; is_read: boolean; is_replied: boolean
+  category: string | null; urgency: string | null; has_suggestion: boolean
 }
 
-interface Props {
-  emails: Email[]
-  onSelect: (id: string) => void
-  selectedId?: string
-}
+interface Props { emails: Email[]; onSelect: (id: string) => void; selectedId?: string }
 
 export default function InboxList({ emails, onSelect, selectedId }: Props) {
+  const { t, locale } = useTranslation()
+
   if (emails.length === 0) {
-    return (
-      <div className="p-8 text-center text-gray-400">
-        Ingen emails fundet
-      </div>
-    )
+    return <div className="p-8 text-center text-slate-400 dark:text-zinc-600">{t('noEmails')}</div>
   }
 
   return (
-    <div className="divide-y divide-gray-100">
+    <div className="divide-y divide-slate-100 dark:divide-white/[0.04]">
       {emails.map((email) => (
         <button
           key={email.id}
           onClick={() => onSelect(email.id)}
-          className={`w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors flex items-start gap-3 ${
-            selectedId === email.id ? 'bg-blue-50' : ''
+          className={`w-full text-left px-4 py-3 transition-all duration-200 flex items-start gap-3 ${
+            selectedId === email.id
+              ? 'bg-indigo-50 dark:bg-indigo-500/10 border-l-2 border-l-indigo-500'
+              : 'hover:bg-slate-50 dark:hover:bg-white/[0.03] border-l-2 border-l-transparent'
           }`}
         >
-          {/* Unread dot */}
           <div className="pt-1.5 flex-shrink-0">
             {!email.is_read ? (
-              <div className="w-2.5 h-2.5 rounded-full bg-blue-600" />
+              <div className="w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse-glow" />
             ) : (
               <div className="w-2.5 h-2.5" />
             )}
           </div>
-
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between gap-2">
-              <span className={`text-sm truncate ${!email.is_read ? 'font-semibold text-gray-900' : 'text-gray-700'}`}>
+              <span className={`text-sm truncate ${!email.is_read ? 'font-semibold text-slate-900 dark:text-zinc-100' : 'text-slate-500 dark:text-zinc-400'}`}>
                 {email.from_name || email.from_address}
               </span>
-              <span className="text-xs text-gray-400 flex-shrink-0">
-                {timeAgo(email.received_at)}
-              </span>
+              <span className="text-xs text-slate-400 dark:text-zinc-600 flex-shrink-0">{timeAgo(email.received_at, locale)}</span>
             </div>
-
-            <p className={`text-sm truncate mt-0.5 ${!email.is_read ? 'font-medium text-gray-800' : 'text-gray-600'}`}>
-              {email.subject || '(Intet emne)'}
+            <p className={`text-sm truncate mt-0.5 ${!email.is_read ? 'font-medium text-slate-700 dark:text-zinc-300' : 'text-slate-400 dark:text-zinc-500'}`}>
+              {email.subject || t('noSubject')}
             </p>
-
             <div className="flex items-center gap-2 mt-1.5">
               {email.category && (
                 <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${categoryColors[email.category] || categoryColors.other}`}>
                   {email.category}
                 </span>
               )}
-              {email.urgency && (
-                <div className={`w-2 h-2 rounded-full ${urgencyDots[email.urgency] || ''}`} />
-              )}
-              {email.has_suggestion && (
-                <span className="text-xs text-blue-500">AI</span>
-              )}
-              {email.is_replied && (
-                <span className="text-xs text-green-500">Besvaret</span>
-              )}
+              {email.urgency && <div className={`w-2 h-2 rounded-full ${urgencyDots[email.urgency] || ''}`} />}
+              {email.has_suggestion && <span className="text-xs text-indigo-600 dark:text-indigo-400 font-medium">AI</span>}
+              {email.is_replied && <span className="text-xs text-green-600 dark:text-green-400">{t('replied')}</span>}
             </div>
           </div>
         </button>

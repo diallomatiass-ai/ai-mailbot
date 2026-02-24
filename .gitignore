@@ -37,3 +37,6 @@ chromadb_data/
 
 # Redis data
 redis_data/
+
+# Celery
+celerybeat-schedule

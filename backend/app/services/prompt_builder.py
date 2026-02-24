@@ -105,15 +105,25 @@ async def build_reply_prompt(
             "\n\n## Available reply templates\n" + "\n".join(items)
         )
 
+    # --- Style analysis from approved replies ---
+    style_section = ""
+    if similar_replies:
+        style_section = """
+## Writing style
+- IMPORTANT: Match the tone, vocabulary, and sentence structure from the previously approved replies below.
+- If approved replies are formal, be formal. If casual, be casual.
+- Mimic greeting style, sign-off style, and level of detail from the examples.
+- Prioritize consistency with the user's established communication patterns."""
+
     return f"""You are a professional email reply assistant. Write a reply to the email below.
 
 ## Instructions
 - Reply in Danish.
 - Maximum 150 words.
-- Professional and friendly tone.
 - Use the provided context (knowledge base, previous replies, templates) to craft an accurate and helpful response.
 - Do NOT include a subject line. Write only the reply body.
 - Sign off with the sender's name: {user.name}
+{style_section}
 
 ## Sender information
 Name: {user.name}{company_section}

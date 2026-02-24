@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi.responses import RedirectResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -13,14 +14,24 @@ from app.config import settings
 router = APIRouter()
 
 
+def _get_base_url(request: Request) -> str:
+    """Build base URL from request, respecting proxy headers."""
+    proto = request.headers.get("x-forwarded-proto", "http")
+    host = request.headers.get("x-forwarded-host") or request.headers.get("host", "localhost")
+    return f"{proto}://{host}"
+
+
 @router.get("/gmail/connect")
-async def gmail_connect(user: User = Depends(get_current_user)):
+async def gmail_connect(request: Request, user: User = Depends(get_current_user)):
     """Return Gmail OAuth2 authorization URL."""
+    base = _get_base_url(request)
+    redirect_uri = settings.gmail_redirect_uri or f"{base}/api/webhooks/gmail/callback"
+
     scopes = "https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send"
     url = (
         f"https://accounts.google.com/o/oauth2/v2/auth?"
         f"client_id={settings.gmail_client_id}&"
-        f"redirect_uri={settings.gmail_redirect_uri}&"
+        f"redirect_uri={redirect_uri}&"
         f"response_type=code&"
         f"scope={scopes}&"
         f"access_type=offline&"
@@ -31,10 +42,13 @@ async def gmail_connect(user: User = Depends(get_current_user)):
 
 
 @router.get("/gmail/callback")
-async def gmail_callback(code: str, state: str, db: AsyncSession = Depends(get_db)):
+async def gmail_callback(code: str, state: str, request: Request, db: AsyncSession = Depends(get_db)):
     """Handle Gmail OAuth2 callback."""
     import httpx
     from datetime import datetime, timezone
+
+    base = _get_base_url(request)
+    redirect_uri = settings.gmail_redirect_uri or f"{base}/api/webhooks/gmail/callback"
 
     async with httpx.AsyncClient() as client:
         resp = await client.post(
@@ -44,11 +58,11 @@ async def gmail_callback(code: str, state: str, db: AsyncSession = Depends(get_d
                 "client_secret": settings.gmail_client_secret,
                 "code": code,
                 "grant_type": "authorization_code",
-                "redirect_uri": settings.gmail_redirect_uri,
+                "redirect_uri": redirect_uri,
             },
         )
         if resp.status_code != 200:
-            raise HTTPException(status_code=400, detail="Failed to exchange code for token")
+            return RedirectResponse(f"{base}/settings?error=gmail_token_failed")
         tokens = resp.json()
 
     # Get user email from Gmail profile
@@ -59,32 +73,55 @@ async def gmail_callback(code: str, state: str, db: AsyncSession = Depends(get_d
         )
         profile = profile_resp.json()
 
+    from uuid import UUID
     user_id = state
-    account = MailAccount(
-        user_id=user_id,
-        provider="gmail",
-        email_address=profile.get("emailAddress", ""),
-        encrypted_access_token=encrypt_token(tokens["access_token"]),
-        encrypted_refresh_token=encrypt_token(tokens.get("refresh_token", "")),
-        token_expires_at=datetime.fromtimestamp(
-            datetime.now(timezone.utc).timestamp() + tokens.get("expires_in", 3600),
-            tz=timezone.utc,
-        ),
+    email_address = profile.get("emailAddress", "")
+    expires_at = datetime.fromtimestamp(
+        datetime.now(timezone.utc).timestamp() + tokens.get("expires_in", 3600),
+        tz=timezone.utc,
     )
-    db.add(account)
-    await db.commit()
 
-    return {"status": "connected", "email": account.email_address}
+    # Check if account already exists for this user+provider+email (upsert)
+    existing = await db.execute(
+        select(MailAccount).where(
+            MailAccount.user_id == UUID(user_id),
+            MailAccount.provider == "gmail",
+            MailAccount.email_address == email_address,
+        )
+    )
+    account = existing.scalar_one_or_none()
+
+    if account:
+        account.encrypted_access_token = encrypt_token(tokens["access_token"])
+        account.encrypted_refresh_token = encrypt_token(tokens.get("refresh_token", ""))
+        account.token_expires_at = expires_at
+        account.is_active = True
+    else:
+        account = MailAccount(
+            user_id=user_id,
+            provider="gmail",
+            email_address=email_address,
+            encrypted_access_token=encrypt_token(tokens["access_token"]),
+            encrypted_refresh_token=encrypt_token(tokens.get("refresh_token", "")),
+            token_expires_at=expires_at,
+        )
+        db.add(account)
+
+    await db.commit()
+    return RedirectResponse(f"{base}/settings?connected=gmail")
 
 
 @router.get("/outlook/connect")
-async def outlook_connect(user: User = Depends(get_current_user)):
+async def outlook_connect(request: Request, user: User = Depends(get_current_user)):
     """Return Outlook OAuth2 authorization URL."""
+    base = _get_base_url(request)
+    redirect_uri = settings.outlook_redirect_uri or f"{base}/api/webhooks/outlook/callback"
+
     scopes = "https://graph.microsoft.com/Mail.ReadWrite https://graph.microsoft.com/Mail.Send offline_access"
     url = (
         f"https://login.microsoftonline.com/{settings.outlook_tenant_id}/oauth2/v2.0/authorize?"
         f"client_id={settings.outlook_client_id}&"
-        f"redirect_uri={settings.outlook_redirect_uri}&"
+        f"redirect_uri={redirect_uri}&"
         f"response_type=code&"
         f"scope={scopes}&"
         f"state={user.id}"
@@ -93,10 +130,13 @@ async def outlook_connect(user: User = Depends(get_current_user)):
 
 
 @router.get("/outlook/callback")
-async def outlook_callback(code: str, state: str, db: AsyncSession = Depends(get_db)):
+async def outlook_callback(code: str, state: str, request: Request, db: AsyncSession = Depends(get_db)):
     """Handle Outlook OAuth2 callback."""
     import httpx
     from datetime import datetime, timezone
+
+    base = _get_base_url(request)
+    redirect_uri = settings.outlook_redirect_uri or f"{base}/api/webhooks/outlook/callback"
 
     async with httpx.AsyncClient() as client:
         resp = await client.post(
@@ -106,12 +146,12 @@ async def outlook_callback(code: str, state: str, db: AsyncSession = Depends(get
                 "client_secret": settings.outlook_client_secret,
                 "code": code,
                 "grant_type": "authorization_code",
-                "redirect_uri": settings.outlook_redirect_uri,
+                "redirect_uri": redirect_uri,
                 "scope": "https://graph.microsoft.com/Mail.ReadWrite https://graph.microsoft.com/Mail.Send offline_access",
             },
         )
         if resp.status_code != 200:
-            raise HTTPException(status_code=400, detail="Failed to exchange code for token")
+            return RedirectResponse(f"{base}/settings?error=outlook_token_failed")
         tokens = resp.json()
 
     # Get user email from Graph
@@ -122,22 +162,42 @@ async def outlook_callback(code: str, state: str, db: AsyncSession = Depends(get
         )
         me = me_resp.json()
 
+    from uuid import UUID
     user_id = state
-    account = MailAccount(
-        user_id=user_id,
-        provider="outlook",
-        email_address=me.get("mail") or me.get("userPrincipalName", ""),
-        encrypted_access_token=encrypt_token(tokens["access_token"]),
-        encrypted_refresh_token=encrypt_token(tokens["refresh_token"]),
-        token_expires_at=datetime.fromtimestamp(
-            datetime.now(timezone.utc).timestamp() + tokens.get("expires_in", 3600),
-            tz=timezone.utc,
-        ),
+    email_address = me.get("mail") or me.get("userPrincipalName", "")
+    expires_at = datetime.fromtimestamp(
+        datetime.now(timezone.utc).timestamp() + tokens.get("expires_in", 3600),
+        tz=timezone.utc,
     )
-    db.add(account)
-    await db.commit()
 
-    return {"status": "connected", "email": account.email_address}
+    # Check if account already exists (upsert)
+    existing = await db.execute(
+        select(MailAccount).where(
+            MailAccount.user_id == UUID(user_id),
+            MailAccount.provider == "outlook",
+            MailAccount.email_address == email_address,
+        )
+    )
+    account = existing.scalar_one_or_none()
+
+    if account:
+        account.encrypted_access_token = encrypt_token(tokens["access_token"])
+        account.encrypted_refresh_token = encrypt_token(tokens["refresh_token"])
+        account.token_expires_at = expires_at
+        account.is_active = True
+    else:
+        account = MailAccount(
+            user_id=user_id,
+            provider="outlook",
+            email_address=email_address,
+            encrypted_access_token=encrypt_token(tokens["access_token"]),
+            encrypted_refresh_token=encrypt_token(tokens["refresh_token"]),
+            token_expires_at=expires_at,
+        )
+        db.add(account)
+
+    await db.commit()
+    return RedirectResponse(f"{base}/settings?connected=outlook")
 
 
 @router.get("/accounts", response_model=list[MailAccountResponse])

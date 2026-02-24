@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { api } from '@/lib/api'
 import { Plus, Pencil, Trash2, BookOpen } from 'lucide-react'
+import { useTranslation } from '@/lib/i18n'
 
 interface KnowledgeEntry {
   id: string
@@ -13,22 +14,23 @@ interface KnowledgeEntry {
   updated_at: string
 }
 
-const typeLabels: Record<string, string> = {
-  faq: 'FAQ',
-  pricing: 'Priser',
-  hours: 'Aab.tider',
-  tone: 'Tone',
-}
-
 const allTypes = ['faq', 'pricing', 'hours', 'tone']
 
 export default function KnowledgePage() {
+  const { t } = useTranslation()
   const [entries, setEntries] = useState<KnowledgeEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [activeType, setActiveType] = useState<string>('faq')
   const [showForm, setShowForm] = useState(false)
   const [editId, setEditId] = useState<string | null>(null)
   const [form, setForm] = useState({ entry_type: 'faq', title: '', content: '' })
+
+  const typeLabels: Record<string, string> = {
+    faq: t('faq'),
+    pricing: t('pricing'),
+    hours: t('hours'),
+    tone: t('tone'),
+  }
 
   const fetchEntries = async () => {
     setLoading(true)
@@ -68,40 +70,42 @@ export default function KnowledgePage() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Slet denne post?')) return
+    if (!confirm(t('deleteEntry'))) return
     await api.deleteKnowledge(id)
     fetchEntries()
   }
 
   return (
-    <div className="p-8 max-w-4xl">
+    <div className="p-8 max-w-4xl animate-fadeIn">
       <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-2">
-          <BookOpen className="w-6 h-6 text-blue-600" />
-          <h1 className="text-2xl font-bold text-gray-900">Videnbase</h1>
+        <div className="flex items-center gap-2.5">
+          <div className="p-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-500/10">
+            <BookOpen className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+          </div>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-zinc-100">{t('knowledgeBase')}</h1>
         </div>
         <button
           onClick={() => { setShowForm(true); setEditId(null); setForm({ entry_type: activeType, title: '', content: '' }) }}
-          className="flex items-center gap-1.5 px-4 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+          className="flex items-center gap-1.5 btn-primary px-4 py-2 text-sm"
         >
-          <Plus className="w-4 h-4" /> Ny post
+          <Plus className="w-4 h-4" /> {t('newEntry')}
         </button>
       </div>
 
-      <p className="text-sm text-gray-500 mb-4">
-        Tilfoej virksomhedsinfo som AI'en bruger til at generere bedre svar.
+      <p className="text-sm text-slate-500 dark:text-zinc-500 mb-4">
+        {t('knowledgeDesc')}
       </p>
 
       {/* Type tabs */}
-      <div className="flex gap-1 mb-6 border-b border-gray-200">
+      <div className="flex gap-1 mb-6 border-b border-slate-200 dark:border-white/[0.06]">
         {allTypes.map((type) => (
           <button
             key={type}
             onClick={() => setActiveType(type)}
-            className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
+            className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-all ${
               activeType === type
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
+                ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
+                : 'border-transparent text-slate-500 dark:text-zinc-500 hover:text-slate-700 dark:hover:text-zinc-300'
             }`}
           >
             {typeLabels[type]}
@@ -110,78 +114,78 @@ export default function KnowledgePage() {
       </div>
 
       {showForm && (
-        <form onSubmit={handleSubmit} className="bg-white border border-gray-200 rounded-xl p-6 mb-6 shadow-sm">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
-            {editId ? 'Rediger post' : 'Ny post'}
+        <form onSubmit={handleSubmit} className="glass-card p-6 mb-6">
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-zinc-100 mb-4">
+            {editId ? t('editEntry') : t('newEntry')}
           </h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+              <label className="block text-sm font-medium text-slate-600 dark:text-zinc-400 mb-1.5">{t('type')}</label>
               <select
                 value={form.entry_type}
                 onChange={(e) => setForm({ ...form, entry_type: e.target.value })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm"
+                className="input-dark"
               >
-                {allTypes.map((t) => (
-                  <option key={t} value={t}>{typeLabels[t]}</option>
+                {allTypes.map((tp) => (
+                  <option key={tp} value={tp}>{typeLabels[tp]}</option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Titel</label>
+              <label className="block text-sm font-medium text-slate-600 dark:text-zinc-400 mb-1.5">{t('title')}</label>
               <input
                 value={form.title}
                 onChange={(e) => setForm({ ...form, title: e.target.value })}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm"
+                className="input-dark"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Indhold</label>
+              <label className="block text-sm font-medium text-slate-600 dark:text-zinc-400 mb-1.5">{t('content')}</label>
               <textarea
                 value={form.content}
                 onChange={(e) => setForm({ ...form, content: e.target.value })}
                 required
                 rows={5}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm resize-y"
+                className="input-dark resize-y"
               />
             </div>
           </div>
           <div className="flex gap-2 mt-4">
-            <button type="submit" className="px-4 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700">
-              {editId ? 'Gem' : 'Opret'}
+            <button type="submit" className="btn-primary px-4 py-2 text-sm">
+              {editId ? t('save') : t('create')}
             </button>
             <button
               type="button"
               onClick={() => { setShowForm(false); setEditId(null) }}
-              className="px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="px-4 py-2 text-sm text-slate-500 dark:text-zinc-400 border border-slate-200 dark:border-zinc-800 rounded-lg hover:bg-slate-100 dark:hover:bg-zinc-800 hover:text-slate-700 dark:hover:text-zinc-200 transition-all"
             >
-              Annuller
+              {t('cancel')}
             </button>
           </div>
         </form>
       )}
 
       {loading ? (
-        <p className="text-gray-400">Indlaeser...</p>
+        <p className="text-slate-400 dark:text-zinc-600">{t('loading')}</p>
       ) : entries.length === 0 ? (
-        <div className="bg-white border border-gray-200 rounded-xl p-8 text-center text-gray-400">
-          Ingen {typeLabels[activeType]?.toLowerCase()}-poster endnu.
+        <div className="glass-card p-8 text-center text-slate-400 dark:text-zinc-600">
+          {typeLabels[activeType]?.toLowerCase()} — {t('noEntries')}
         </div>
       ) : (
         <div className="space-y-3">
           {entries.map((entry) => (
-            <div key={entry.id} className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+            <div key={entry.id} className="glass-card p-4 group hover:border-slate-300 dark:hover:border-white/[0.12] transition-all duration-200">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <h3 className="font-medium text-gray-900 mb-1">{entry.title}</h3>
-                  <p className="text-sm text-gray-600 whitespace-pre-wrap">{entry.content}</p>
+                  <h3 className="font-medium text-slate-800 dark:text-zinc-200 mb-1">{entry.title}</h3>
+                  <p className="text-sm text-slate-500 dark:text-zinc-500 whitespace-pre-wrap">{entry.content}</p>
                 </div>
-                <div className="flex gap-1 ml-4">
-                  <button onClick={() => handleEdit(entry)} className="p-1.5 text-gray-400 hover:text-blue-600">
+                <div className="flex gap-1 ml-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button onClick={() => handleEdit(entry)} className="p-1.5 text-slate-400 dark:text-zinc-600 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors">
                     <Pencil className="w-4 h-4" />
                   </button>
-                  <button onClick={() => handleDelete(entry.id)} className="p-1.5 text-gray-400 hover:text-red-600">
+                  <button onClick={() => handleDelete(entry.id)} className="p-1.5 text-slate-400 dark:text-zinc-600 hover:text-red-500 dark:hover:text-red-400 transition-colors">
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>

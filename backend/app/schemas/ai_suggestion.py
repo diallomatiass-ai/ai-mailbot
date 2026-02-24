@@ -18,3 +18,12 @@ class AiSuggestionResponse(BaseModel):
 class SuggestionAction(BaseModel):
     action: str  # approve, edit, reject
     edited_text: str | None = None
+
+
+class RefineRequest(BaseModel):
+    prompt: str  # User instruction, e.g. "gør det mere formelt"
+    current_text: str | None = None  # Current text to refine (uses suggested_text if None)
+
+
+class RefineResponse(BaseModel):
+    refined_text: str

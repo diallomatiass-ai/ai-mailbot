@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
 
 async function fetchApi(path: string, options: RequestInit = {}) {
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
@@ -59,6 +59,11 @@ export const api = {
     }),
   sendSuggestion: (id: string) =>
     fetchApi(`/suggestions/${id}/send`, { method: 'POST' }),
+  refineSuggestion: (id: string, prompt: string, currentText?: string) =>
+    fetchApi(`/suggestions/${id}/refine`, {
+      method: 'POST',
+      body: JSON.stringify({ prompt, current_text: currentText }),
+    }),
 
   // Templates
   listTemplates: () => fetchApi('/templates/'),

@@ -83,6 +83,21 @@ async def sync_account(account: MailAccount, db: AsyncSession) -> int:
     if new_count:
         await db.commit()
 
+        # Trigger AI processing for each new email
+        from app.tasks.worker import process_single_email
+        for msg in messages:
+            if msg["provider_id"] not in existing_ids:
+                # Find the email we just saved
+                saved = await db.execute(
+                    select(EmailMessage).where(
+                        EmailMessage.account_id == account.id,
+                        EmailMessage.provider_id == msg["provider_id"],
+                    )
+                )
+                saved_email = saved.scalar_one_or_none()
+                if saved_email:
+                    process_single_email.delay(str(saved_email.id))
+
     logger.info(
         "Synced %s — %d new / %d fetched / %d duplicates skipped",
         account.email_address,

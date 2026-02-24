@@ -1,25 +1,25 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import Sidebar from '@/components/Sidebar'
+import { I18nProvider } from '@/lib/i18n'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'AI Mailbot',
-  description: 'GDPR-venlig AI-mailbot til danske SMV\'er',
+  title: 'Ahmes - AI Mailbot Assistant',
+  description: 'AI-powered email assistant',
+  icons: {
+    icon: '/logo.png',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="da">
-      <body className={`${inter.className} bg-gray-50`}>
-        <div className="flex h-screen">
-          <Sidebar />
-          <main className="flex-1 overflow-auto">
-            {children}
-          </main>
-        </div>
+    <html lang="da" suppressHydrationWarning>
+      <body className={`${inter.className} antialiased`} style={{ backgroundColor: 'var(--bg)', color: 'var(--text-primary)' }}>
+        <I18nProvider>
+          {children}
+        </I18nProvider>
       </body>
     </html>
   )

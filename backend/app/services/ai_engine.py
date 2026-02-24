@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 # Default timeout for Ollama requests (generation can be slow on large models)
-_OLLAMA_TIMEOUT = httpx.Timeout(120.0, connect=10.0)
+_OLLAMA_TIMEOUT = httpx.Timeout(300.0, connect=10.0)
 
 
 async def get_embedding(text: str) -> list[float]:
@@ -61,6 +61,7 @@ async def _call_ollama_generate(prompt: str) -> str:
         "model": settings.ollama_model,
         "prompt": prompt,
         "stream": False,
+        "options": {"num_ctx": 2048},
     }
 
     async with httpx.AsyncClient(timeout=_OLLAMA_TIMEOUT) as client:

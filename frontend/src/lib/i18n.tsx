@@ -1,0 +1,335 @@
+'use client'
+
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+
+export type Locale = 'da' | 'en'
+export type Theme = 'light' | 'dark'
+
+const translations = {
+  da: {
+    // App
+    appName: 'Ahmes',
+    appDesc: 'AI-drevet email assistent',
+    version: 'v1.0',
+
+    // Nav
+    dashboard: 'Dashboard',
+    inbox: 'Indbakke',
+    templates: 'Skabeloner',
+    knowledgeBase: 'Videnbase',
+    settings: 'Indstillinger',
+
+    // Common
+    loading: 'Indlæser...',
+    save: 'Gem',
+    create: 'Opret',
+    cancel: 'Annuller',
+    delete: 'Slet',
+    edit: 'Rediger',
+    back: 'Tilbage',
+    name: 'Navn',
+    email: 'Email',
+    password: 'Adgangskode',
+    noData: 'Ingen data endnu',
+    all: 'Alle',
+
+    // Auth
+    signIn: 'Log ind',
+    signUp: 'Opret konto',
+    signingIn: 'Vent...',
+    noAccount: 'Har du ikke en konto?',
+    hasAccount: 'Har du allerede en konto?',
+    companyName: 'Virksomhedsnavn',
+    somethingWrong: 'Noget gik galt',
+
+    // Dashboard
+    totalEmails: 'Total emails',
+    unread: 'Ulæste',
+    processed: 'Behandlede',
+    categories: 'Kategorier',
+    priority: 'Prioritet',
+    high: 'Høj',
+    medium: 'Medium',
+    low: 'Lav',
+
+    // Inbox
+    noEmails: 'Ingen emails fundet',
+    noSubject: '(Intet emne)',
+    replied: 'Besvaret',
+    now: 'Nu',
+
+    // Categories
+    inquiry: 'Foresp.',
+    complaint: 'Klage',
+    order: 'Ordre',
+    support: 'Support',
+    spam: 'Spam',
+    other: 'Andet',
+
+    // Email detail
+    emailNotFound: 'Email ikke fundet',
+    backToInbox: 'Tilbage til indbakke',
+    aiSuggestions: 'AI-forslag',
+    noSuggestions: 'Ingen forslag genereret',
+    awaitingAi: 'Afventer AI-behandling...',
+    classification: 'Klassificering',
+    category: 'Kategori',
+    topic: 'Emne',
+    confidence: 'Sikkerhed',
+    from: 'Fra:',
+    to: 'Til:',
+    date: 'Dato:',
+    noContent: 'Ingen indhold',
+
+    // AI Suggestion
+    aiSuggestion: 'AI-forslag',
+    pending: 'Afventer',
+    approved: 'Godkendt',
+    edited: 'Redigeret',
+    rejected: 'Afvist',
+    approve: 'Godkend',
+    reject: 'Afvis',
+    sendReply: 'Send svar',
+    refineWithAi: 'Juster med AI',
+    refineTitle: 'Juster AI-forslaget',
+    apply: 'Anvend',
+    discard: 'Kassér',
+    refinePlaceholder: 'f.eks. gør det mere formelt, kortere, tilføj pris...',
+    refineHint: 'Tryk Enter for at sende. AI justerer forslaget efter din instruktion.',
+    sent: 'Sendt',
+
+    // Reply editor
+    words: 'ord',
+    chars: 'tegn',
+
+    // Templates
+    newTemplate: 'Ny skabelon',
+    editTemplate: 'Rediger skabelon',
+    none: 'Ingen',
+    content: 'Indhold',
+    noTemplates: 'Ingen skabeloner endnu. Opret din første skabelon ovenfor.',
+    deleteTemplate: 'Slet denne skabelon?',
+    used: 'Brugt',
+
+    // Knowledge
+    newEntry: 'Ny post',
+    editEntry: 'Rediger post',
+    type: 'Type',
+    title: 'Titel',
+    knowledgeDesc: 'Tilføj virksomhedsinfo som AI\'en bruger til at generere bedre svar.',
+    noEntries: 'poster endnu.',
+    deleteEntry: 'Slet denne post?',
+    faq: 'FAQ',
+    pricing: 'Priser',
+    hours: 'Åbn.tider',
+    tone: 'Tone',
+
+    // Settings
+    emailAccounts: 'Mailkonti',
+    emailAccountsDesc: 'Forbind dine mailkonti for at modtage og sende emails.',
+    connectGmail: 'Forbind Gmail',
+    connectOutlook: 'Forbind Outlook',
+    disconnectAccount: 'Fjern denne mailkonto?',
+    signOut: 'Log ud',
+    language: 'Sprog',
+    languageDesc: 'Vælg sprog for dashboard og AI-forslag.',
+    theme: 'Tema',
+    themeDesc: 'Skift mellem dag og nat tilstand.',
+    themeDay: 'Dag',
+    themeNight: 'Nat',
+  },
+  en: {
+    // App
+    appName: 'Ahmes',
+    appDesc: 'AI-powered email assistant',
+    version: 'v1.0',
+
+    // Nav
+    dashboard: 'Dashboard',
+    inbox: 'Inbox',
+    templates: 'Templates',
+    knowledgeBase: 'Knowledge Base',
+    settings: 'Settings',
+
+    // Common
+    loading: 'Loading...',
+    save: 'Save',
+    create: 'Create',
+    cancel: 'Cancel',
+    delete: 'Delete',
+    edit: 'Edit',
+    back: 'Back',
+    name: 'Name',
+    email: 'Email',
+    password: 'Password',
+    noData: 'No data yet',
+    all: 'All',
+
+    // Auth
+    signIn: 'Sign in',
+    signUp: 'Create account',
+    signingIn: 'Wait...',
+    noAccount: "Don't have an account?",
+    hasAccount: 'Already have an account?',
+    companyName: 'Company name',
+    somethingWrong: 'Something went wrong',
+
+    // Dashboard
+    totalEmails: 'Total emails',
+    unread: 'Unread',
+    processed: 'Processed',
+    categories: 'Categories',
+    priority: 'Priority',
+    high: 'High',
+    medium: 'Medium',
+    low: 'Low',
+
+    // Inbox
+    noEmails: 'No emails found',
+    noSubject: '(No subject)',
+    replied: 'Replied',
+    now: 'Now',
+
+    // Categories
+    inquiry: 'Inquiry',
+    complaint: 'Complaint',
+    order: 'Order',
+    support: 'Support',
+    spam: 'Spam',
+    other: 'Other',
+
+    // Email detail
+    emailNotFound: 'Email not found',
+    backToInbox: 'Back to inbox',
+    aiSuggestions: 'AI Suggestions',
+    noSuggestions: 'No suggestions generated',
+    awaitingAi: 'Awaiting AI processing...',
+    classification: 'Classification',
+    category: 'Category',
+    topic: 'Topic',
+    confidence: 'Confidence',
+    from: 'From:',
+    to: 'To:',
+    date: 'Date:',
+    noContent: 'No content',
+
+    // AI Suggestion
+    aiSuggestion: 'AI Suggestion',
+    pending: 'Pending',
+    approved: 'Approved',
+    edited: 'Edited',
+    rejected: 'Rejected',
+    approve: 'Approve',
+    reject: 'Reject',
+    sendReply: 'Send reply',
+    refineWithAi: 'Refine with AI',
+    refineTitle: 'Refine AI suggestion',
+    apply: 'Apply',
+    discard: 'Discard',
+    refinePlaceholder: 'e.g. make it more formal, shorter, add price...',
+    refineHint: 'Press Enter to send. AI refines the suggestion based on your instructions.',
+    sent: 'Sent',
+
+    // Reply editor
+    words: 'words',
+    chars: 'chars',
+
+    // Templates
+    newTemplate: 'New template',
+    editTemplate: 'Edit template',
+    none: 'None',
+    content: 'Content',
+    noTemplates: 'No templates yet. Create your first template above.',
+    deleteTemplate: 'Delete this template?',
+    used: 'Used',
+
+    // Knowledge
+    newEntry: 'New entry',
+    editEntry: 'Edit entry',
+    type: 'Type',
+    title: 'Title',
+    knowledgeDesc: 'Add company information that AI uses to generate better responses.',
+    noEntries: 'entries yet.',
+    deleteEntry: 'Delete this entry?',
+    faq: 'FAQ',
+    pricing: 'Pricing',
+    hours: 'Hours',
+    tone: 'Tone',
+
+    // Settings
+    emailAccounts: 'Email Accounts',
+    emailAccountsDesc: 'Connect your email accounts to receive and send emails.',
+    connectGmail: 'Connect Gmail',
+    connectOutlook: 'Connect Outlook',
+    disconnectAccount: 'Remove this email account?',
+    signOut: 'Sign out',
+    language: 'Language',
+    languageDesc: 'Choose language for dashboard and AI suggestions.',
+    theme: 'Theme',
+    themeDesc: 'Switch between day and night mode.',
+    themeDay: 'Day',
+    themeNight: 'Night',
+  },
+} as const
+
+export type TranslationKey = keyof typeof translations.da
+
+interface I18nContextType {
+  locale: Locale
+  setLocale: (locale: Locale) => void
+  theme: Theme
+  setTheme: (theme: Theme) => void
+  t: (key: TranslationKey) => string
+}
+
+const I18nContext = createContext<I18nContextType>({
+  locale: 'da',
+  setLocale: () => {},
+  theme: 'light',
+  setTheme: () => {},
+  t: (key) => key,
+})
+
+export function I18nProvider({ children }: { children: ReactNode }) {
+  const [locale, setLocaleState] = useState<Locale>('da')
+  const [theme, setThemeState] = useState<Theme>('light')
+
+  useEffect(() => {
+    const savedLocale = localStorage.getItem('ahmes-locale') as Locale | null
+    if (savedLocale && (savedLocale === 'da' || savedLocale === 'en')) {
+      setLocaleState(savedLocale)
+    }
+    const savedTheme = localStorage.getItem('ahmes-theme') as Theme | null
+    if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
+      setThemeState(savedTheme)
+      document.documentElement.classList.toggle('dark', savedTheme === 'dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [])
+
+  const setLocale = (newLocale: Locale) => {
+    setLocaleState(newLocale)
+    localStorage.setItem('ahmes-locale', newLocale)
+  }
+
+  const setTheme = (newTheme: Theme) => {
+    setThemeState(newTheme)
+    localStorage.setItem('ahmes-theme', newTheme)
+    document.documentElement.classList.toggle('dark', newTheme === 'dark')
+  }
+
+  const t = (key: TranslationKey): string => {
+    return translations[locale][key] || translations.da[key] || key
+  }
+
+  return (
+    <I18nContext.Provider value={{ locale, setLocale, theme, setTheme, t }}>
+      {children}
+    </I18nContext.Provider>
+  )
+}
+
+export function useTranslation() {
+  return useContext(I18nContext)
+}

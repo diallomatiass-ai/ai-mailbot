@@ -1,3 +1,173 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  /* Light theme (default) */
+  :root {
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --surface-hover: #f1f5f9;
+    --border: #e2e8f0;
+    --border-subtle: rgba(0, 0, 0, 0.06);
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --accent: #6366f1;
+    --accent-hover: #4f46e5;
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-border: rgba(0, 0, 0, 0.06);
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --card-border: rgba(0, 0, 0, 0.08);
+    --input-bg: #f8fafc;
+    --input-border: #e2e8f0;
+    --gradient-border-bg: #ffffff;
+    --scrollbar-thumb: #cbd5e1;
+    --scrollbar-thumb-hover: #94a3b8;
+    color-scheme: light;
+  }
+
+  /* Dark theme */
+  .dark {
+    --bg: #09090b;
+    --surface: #18181b;
+    --surface-hover: #27272a;
+    --border: #27272a;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --text-primary: #fafafa;
+    --text-secondary: #a1a1aa;
+    --text-muted: #71717a;
+    --accent: #6366f1;
+    --accent-hover: #818cf8;
+    --glass-bg: rgba(24, 24, 27, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.06);
+    --card-bg: rgba(24, 24, 27, 0.5);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --input-bg: #18181b;
+    --input-border: #27272a;
+    --gradient-border-bg: #18181b;
+    --scrollbar-thumb: #27272a;
+    --scrollbar-thumb-hover: #3f3f46;
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
+  }
+}
+
+@layer components {
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+  }
+
+  .glass-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    border-radius: 0.75rem;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  .gradient-border {
+    position: relative;
+    background: var(--gradient-border-bg);
+    border-radius: 0.75rem;
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6, #6366f1);
+    z-index: -1;
+    opacity: 0.5;
+  }
+
+  .input-field {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 0.5rem;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  .input-field:focus {
+    border-color: rgba(99, 102, 241, 0.5);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  }
+
+  /* Keep input-dark as alias for backwards compat */
+  .input-dark {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 0.5rem;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  .input-dark:focus {
+    border-color: rgba(99, 102, 241, 0.5);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+  }
+
+  .btn-primary {
+    @apply px-4 py-2 text-sm font-medium text-white rounded-lg transition-all;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #818cf8, #a78bfa);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+  }
+
+  /* Theme-aware text helpers */
+  .text-heading {
+    color: var(--text-primary);
+  }
+
+  .text-body {
+    color: var(--text-secondary);
+  }
+
+  .text-dim {
+    color: var(--text-muted);
+  }
+}

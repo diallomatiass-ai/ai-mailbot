@@ -16,13 +16,13 @@ class Settings(BaseSettings):
     # Gmail OAuth2
     gmail_client_id: str = ""
     gmail_client_secret: str = ""
-    gmail_redirect_uri: str = "http://localhost:8000/api/auth/gmail/callback"
+    gmail_redirect_uri: str = ""
 
     # Outlook OAuth2
     outlook_client_id: str = ""
     outlook_client_secret: str = ""
     outlook_tenant_id: str = "common"
-    outlook_redirect_uri: str = "http://localhost:8000/api/auth/outlook/callback"
+    outlook_redirect_uri: str = ""
 
     # Ollama
     ollama_base_url: str = "http://ollama:11434"

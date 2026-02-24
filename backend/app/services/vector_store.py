@@ -1,6 +1,9 @@
 """ChromaDB vector store integration for knowledge base and approved replies."""
 
+from __future__ import annotations
+
 import logging
+from typing import Optional
 
 import chromadb
 import httpx
@@ -9,7 +12,7 @@ from app.config import settings
 
 logger = logging.getLogger(__name__)
 
-_chroma_client: chromadb.HttpClient | None = None
+_chroma_client: Optional[chromadb.HttpClient] = None
 
 
 def _get_chroma_client() -> chromadb.HttpClient:

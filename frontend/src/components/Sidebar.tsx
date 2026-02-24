@@ -2,28 +2,36 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Inbox, LayoutDashboard, FileText, BookOpen, Settings, Bot } from 'lucide-react'
-
-const navItems = [
-  { href: '/', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/inbox', label: 'Indbakke', icon: Inbox },
-  { href: '/templates', label: 'Skabeloner', icon: FileText },
-  { href: '/knowledge', label: 'Videnbase', icon: BookOpen },
-  { href: '/settings', label: 'Indstillinger', icon: Settings },
-]
+import Image from 'next/image'
+import { Inbox, LayoutDashboard, FileText, BookOpen, Settings, Sun, Moon } from 'lucide-react'
+import { useTranslation } from '@/lib/i18n'
 
 export default function Sidebar() {
   const pathname = usePathname()
+  const { t, theme, setTheme } = useTranslation()
+
+  const navItems = [
+    { href: '/', label: t('dashboard'), icon: LayoutDashboard },
+    { href: '/inbox', label: t('inbox'), icon: Inbox },
+    { href: '/templates', label: t('templates'), icon: FileText },
+    { href: '/knowledge', label: t('knowledgeBase'), icon: BookOpen },
+    { href: '/settings', label: t('settings'), icon: Settings },
+  ]
 
   return (
-    <aside className="w-64 bg-white border-r border-gray-200 flex flex-col">
-      <div className="p-6 border-b border-gray-200">
-        <div className="flex items-center gap-2">
-          <Bot className="w-8 h-8 text-blue-600" />
-          <h1 className="text-xl font-bold text-gray-900">AI Mailbot</h1>
+    <aside className="w-64 border-r border-slate-200 dark:border-white/[0.06] bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl flex flex-col">
+      <div className="px-4 py-5 border-b border-slate-200 dark:border-white/[0.06]">
+        <div className="flex items-center justify-center">
+          <Image
+            src={theme === 'dark' ? '/logo-dark.png' : '/logo.png'}
+            alt="Ahmes"
+            width={150}
+            height={90}
+            className="object-contain"
+          />
         </div>
       </div>
-      <nav className="flex-1 p-4 space-y-1">
+      <nav className="flex-1 p-3 space-y-0.5">
         {navItems.map((item) => {
           const Icon = item.icon
           const isActive = pathname === item.href ||
@@ -32,18 +40,27 @@ export default function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                 isActive
-                  ? 'bg-blue-50 text-blue-700'
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 shadow-[inset_0_0_0_1px_rgba(99,102,241,0.15)]'
+                  : 'text-slate-500 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-white/[0.04] hover:text-slate-800 dark:hover:text-zinc-200'
               }`}
             >
-              <Icon className="w-5 h-5" />
+              <Icon className={`w-5 h-5 ${isActive ? 'text-indigo-600 dark:text-indigo-400' : ''}`} />
               {item.label}
             </Link>
           )
         })}
       </nav>
+      <div className="p-3 border-t border-slate-200 dark:border-white/[0.06]">
+        <button
+          onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+          className="flex items-center gap-2 w-full px-3 py-2 text-xs text-slate-500 dark:text-zinc-500 hover:text-slate-800 dark:hover:text-zinc-300 rounded-lg hover:bg-slate-50 dark:hover:bg-white/[0.04] transition-all"
+        >
+          {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+          {theme === 'light' ? t('themeNight') : t('themeDay')}
+        </button>
+      </div>
     </aside>
   )
 }
