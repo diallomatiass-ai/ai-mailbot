@@ -6,7 +6,7 @@ import asyncio
 import uuid
 from datetime import datetime, timezone, timedelta
 
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import delete, select
 from app.database import async_session, engine, Base
 from app.models.user import User
 from app.models.mail_account import MailAccount
@@ -23,6 +23,27 @@ async def seed():
         await conn.run_sync(Base.metadata.create_all)
 
     async with async_session() as db:
+        # --- Ryd eksisterende testdata (korrekt rækkefølge pga. foreign keys) ---
+        existing_user = (await db.execute(select(User).where(User.email == "test@mailbot.dk"))).scalar_one_or_none()
+        if existing_user:
+            # Hent konti og emails for brugeren
+            account_ids = [r[0] for r in (await db.execute(
+                select(MailAccount.id).where(MailAccount.user_id == existing_user.id)
+            )).all()]
+            if account_ids:
+                email_ids = [r[0] for r in (await db.execute(
+                    select(EmailMessage.id).where(EmailMessage.account_id.in_(account_ids))
+                )).all()]
+                if email_ids:
+                    await db.execute(delete(AiSuggestion).where(AiSuggestion.email_id.in_(email_ids)))
+                    await db.execute(delete(EmailMessage).where(EmailMessage.account_id.in_(account_ids)))
+                await db.execute(delete(MailAccount).where(MailAccount.user_id == existing_user.id))
+            await db.execute(delete(Template).where(Template.user_id == existing_user.id))
+            await db.execute(delete(KnowledgeBase).where(KnowledgeBase.user_id == existing_user.id))
+            await db.execute(delete(User).where(User.id == existing_user.id))
+            await db.commit()
+            print("Ryddede eksisterende testdata")
+
         # --- Bruger ---
         user = User(
             id=uuid.uuid4(),
@@ -90,12 +111,12 @@ async def seed():
 
         # --- AI-forslag (6 stk) ---
         suggestions_data = [
-            (0, "Kære kunde,\n\nTak for din henvendelse. Din pakke er afsendt og forventes leveret inden for 2-3 hverdage. Du vil modtage en sporingskode på email.\n\nMed venlig hilsen\nKundeservice"),
-            (1, "Kære Peter,\n\nBeklager ulejligheden. Jeg sender dig fakturaen for bestilling #1234 med det samme. Du kan også finde den i din kontohistorik.\n\nMed venlig hilsen\nKundeservice"),
-            (2, "Kære Lars,\n\nVi er meget kede af at høre om dit beskadigede produkt. Vi sender øjeblikkeligt et erstatningsprodukt til dig uden beregning.\n\nMed venlig hilsen\nKundeservice"),
-            (4, "Kære kunde,\n\nVi har nulstillet din adgangskode. Du vil modtage en email med et link til at oprette en ny. Kontakt os igen, hvis du fortsat har problemer.\n\nMed venlig hilsen\nSupport"),
-            (9, "Kære Jens,\n\nBeklager at din ordre var ufuldstændig. Vi afsender de manglende 2 varer i dag som ekspreslevering uden ekstra omkostninger.\n\nMed venlig hilsen\nKundeservice"),
-            (7, "Hej Thomas,\n\nForsendelse til Sverige koster 89 kr. for standardlevering (5-7 dage) eller 149 kr. for ekspres (2-3 dage).\n\nMed venlig hilsen\nKundeservice"),
+            (0, "Hej Lars,\n\nTak for din henvendelse. Vi kigger gerne på jeres køkken og giver et uforpligtende tilbud. Kan vi aftale et besøg tirsdag eller onsdag?\n\nMed venlig hilsen\nTest Bruger"),
+            (1, "Hej Mia,\n\nTak for din forespørgsel. Vi har ledige tider fra på torsdag. Prisen for 80 m² stue og gang er ca. 12.000 kr. inkl. maling og to lag.\n\nMed venlig hilsen\nTest Bruger"),
+            (2, "Hej Peter,\n\nVi beklager meget at taget lækker. Det er selvfølgelig ikke acceptabelt. Vi kommer ud og kigger på det allerede i morgen og udbedrer fejlen uden beregning.\n\nMed venlig hilsen\nTest Bruger"),
+            (5, "Hej Henrik,\n\nTak for din forespørgsel. Et badeværelse på 6 m² inkl. fliser og sanitet koster typisk 45.000–60.000 kr. Ønsker du et præcist tilbud, laver vi gerne et besøg.\n\nMed venlig hilsen\nTest Bruger"),
+            (7, "Hej Jens,\n\nVi er kede af at høre om de revnede fliser. Vi kommer ud og vurderer skaden torsdag og udbedrer det uden ekstra omkostninger for dig.\n\nMed venlig hilsen\nTest Bruger"),
+            (11, "Hej David,\n\nTak for din forespørgsel. Tagrenovering af 200 m² inkl. tagtjærepap og arbejde koster fra 80.000 kr. Vi sender en detaljeret tilbudsskrivelse.\n\nMed venlig hilsen\nTest Bruger"),
         ]
 
         for email_idx, text in suggestions_data:
@@ -111,10 +132,10 @@ async def seed():
 
         # --- Skabeloner (4 stk) ---
         templates = [
-            Template(id=uuid.uuid4(), user_id=user.id, name="Standardkvittering", body="Kære {{navn}},\n\nTak for din henvendelse. Vi vender tilbage inden for 24 timer.\n\nMed venlig hilsen\nKundeservice", category="inquiry"),
-            Template(id=uuid.uuid4(), user_id=user.id, name="Klagehåndtering", body="Kære {{navn}},\n\nVi beklager meget de problemer du har oplevet. Vi tager din henvendelse meget alvorligt og vil løse dette hurtigst muligt.\n\nMed venlig hilsen\nKundeservice", category="complaint"),
-            Template(id=uuid.uuid4(), user_id=user.id, name="Teknisk support", body="Kære {{navn}},\n\nTak for din henvendelse til vores support. Lad os hjælpe dig med at løse dette.\n\nMed venlig hilsen\nTeknisk Support", category="support"),
-            Template(id=uuid.uuid4(), user_id=user.id, name="Ordrebekræftelse", body="Kære {{navn}},\n\nTak for din ordre. Din bestilling er modtaget og behandles nu.\n\nMed venlig hilsen\nSalg", category="order"),
+            Template(id=uuid.uuid4(), user_id=user.id, name="Tilbudssvar", body="Hej {{navn}},\n\nTak for din forespørgsel. Vi giver gerne et uforpligtende tilbud. Kan vi aftale et besøg for at vurdere opgaven?\n\nMed venlig hilsen", category="tilbud"),
+            Template(id=uuid.uuid4(), user_id=user.id, name="Reklamationssvar", body="Hej {{navn}},\n\nVi beklager meget de problemer du har oplevet. Vi tager din reklamation alvorligt og udbedrer fejlen hurtigst muligt.\n\nMed venlig hilsen", category="reklamation"),
+            Template(id=uuid.uuid4(), user_id=user.id, name="Bookingbekræftelse", body="Hej {{navn}},\n\nTak for din forespørgsel. Vi kan komme {{dato}}. Pris aftales efter besigtigelse.\n\nMed venlig hilsen", category="booking"),
+            Template(id=uuid.uuid4(), user_id=user.id, name="Fakturakvittering", body="Hej {{navn}},\n\nTak — vi har modtaget din betaling. Kvittering sendes særskilt.\n\nMed venlig hilsen", category="faktura"),
         ]
         for t in templates:
             db.add(t)
