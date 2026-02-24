@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { api } from '@/lib/api'
 import EmailDetail from '@/components/EmailDetail'
 import AiSuggestionCard from '@/components/AiSuggestionCard'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Sparkles, Loader2 } from 'lucide-react'
 import { useTranslation } from '@/lib/i18n'
 
 export default function EmailPage() {
@@ -16,6 +16,7 @@ export default function EmailPage() {
   const [email, setEmail] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [generating, setGenerating] = useState(false)
 
   const fetchEmail = async () => {
     try { const data = await api.getEmail(id); setEmail(data) }
@@ -31,6 +32,12 @@ export default function EmailPage() {
   const handleSend = async (suggestionId: string) => {
     await api.sendSuggestion(suggestionId); await fetchEmail()
   }
+  const handleGenerate = async () => {
+    setGenerating(true)
+    try { await api.generateSuggestion(id); await fetchEmail() }
+    catch (err: any) { alert(err.message) }
+    finally { setGenerating(false) }
+  }
 
   if (loading) return <div className="p-8 text-slate-400 dark:text-zinc-600">{t('loading')}</div>
 
@@ -45,12 +52,24 @@ export default function EmailPage() {
     )
   }
 
+  const hasSuggestions = email.suggestions && email.suggestions.length > 0
+
   return (
     <div className="h-full flex flex-col animate-fadeIn">
-      <div className="p-4 border-b border-slate-200 dark:border-white/[0.06] bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl">
+      <div className="p-4 border-b border-slate-200 dark:border-white/[0.06] bg-white/80 dark:bg-zinc-950/80 backdrop-blur-xl flex items-center justify-between">
         <Link href="/inbox" className="inline-flex items-center gap-1.5 text-sm text-slate-500 dark:text-zinc-500 hover:text-slate-800 dark:hover:text-zinc-200 transition-colors">
           <ArrowLeft className="w-4 h-4" /> {t('back')}
         </Link>
+        {!hasSuggestions && (
+          <button
+            onClick={handleGenerate}
+            disabled={generating}
+            className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-50 transition-colors"
+          >
+            {generating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+            {generating ? 'Genererer...' : 'Generer AI-forslag'}
+          </button>
+        )}
       </div>
       <div className="flex-1 overflow-auto p-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl">
@@ -59,13 +78,21 @@ export default function EmailPage() {
           </div>
           <div className="space-y-4">
             <h3 className="text-xs font-semibold text-slate-500 dark:text-zinc-500 uppercase tracking-wider">{t('aiSuggestions')}</h3>
-            {email.suggestions && email.suggestions.length > 0 ? (
+            {hasSuggestions ? (
               email.suggestions.map((s: any) => (
                 <AiSuggestionCard key={s.id} suggestion={s} onAction={handleAction} onSend={handleSend} />
               ))
             ) : (
               <div className="glass-card p-4 text-sm text-slate-400 dark:text-zinc-600">
-                {email.processed ? t('noSuggestions') : t('awaitingAi')}
+                <p className="mb-3">{email.processed ? t('noSuggestions') : t('awaitingAi')}</p>
+                <button
+                  onClick={handleGenerate}
+                  disabled={generating}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-lg bg-indigo-100 dark:bg-indigo-500/20 hover:bg-indigo-200 dark:hover:bg-indigo-500/30 text-indigo-700 dark:text-indigo-300 disabled:opacity-50 transition-colors"
+                >
+                  {generating ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
+                  {generating ? 'Genererer...' : 'Generer AI-forslag nu'}
+                </button>
               </div>
             )}
             {email.category && (

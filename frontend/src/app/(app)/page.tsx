@@ -1,9 +1,29 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { api } from '@/lib/api'
-import { Mail, AlertTriangle, CheckCircle, Clock } from 'lucide-react'
-import { useTranslation } from '@/lib/i18n'
+import {
+  Mail, AlertTriangle, CheckCircle, Clock,
+  Inbox, Sparkles, TrendingUp, ChevronRight,
+} from 'lucide-react'
+
+interface TopEmail {
+  id: string
+  subject: string
+  from_address: string
+  urgency: string
+  category: string | null
+}
+
+interface DashboardData {
+  user_name: string
+  unread: number
+  high_priority: number
+  pending_suggestions: number
+  week_total: number
+  top_urgent: TopEmail[]
+}
 
 interface Stats {
   total: number
@@ -12,111 +32,198 @@ interface Stats {
   urgency: Record<string, number>
 }
 
+function greeting(name: string): string {
+  const h = new Date().getHours()
+  if (h < 10) return `God morgen, ${name}`
+  if (h < 12) return `God formiddag, ${name}`
+  if (h < 18) return `God eftermiddag, ${name}`
+  return `God aften, ${name}`
+}
+
+const urgencyColor: Record<string, string> = {
+  high: 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/10 border-red-200 dark:border-red-500/20',
+  medium: 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/20',
+  low: 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-500/10 border-green-200 dark:border-green-500/20',
+}
+
+const urgencyLabel: Record<string, string> = { high: 'Høj', medium: 'Medium', low: 'Lav' }
+
 export default function Dashboard() {
-  const { t } = useTranslation()
+  const [dash, setDash] = useState<DashboardData | null>(null)
   const [stats, setStats] = useState<Stats | null>(null)
 
   useEffect(() => {
+    api.getDashboardSummary().then(setDash).catch(console.error)
     api.getEmailStats().then(setStats).catch(console.error)
   }, [])
 
-  if (!stats) {
-    return (
-      <div className="p-8">
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-zinc-100 mb-6">{t('dashboard')}</h1>
-        <p className="text-slate-500 dark:text-zinc-500">{t('loading')}</p>
-      </div>
-    )
-  }
-
-  const urgencyConfig: Record<string, { iconColor: string; glow: string; icon: typeof AlertTriangle }> = {
-    high: { iconColor: 'text-red-500 dark:text-red-400', glow: 'bg-red-50 dark:bg-red-500/10', icon: AlertTriangle },
-    medium: { iconColor: 'text-amber-500 dark:text-amber-400', glow: 'bg-amber-50 dark:bg-amber-500/10', icon: Clock },
-    low: { iconColor: 'text-green-500 dark:text-green-400', glow: 'bg-green-50 dark:bg-green-500/10', icon: CheckCircle },
-  }
-
-  const urgencyLabels: Record<string, string> = { high: t('high'), medium: t('medium'), low: t('low') }
-
   return (
-    <div className="p-8 animate-fadeIn">
-      <h1 className="text-2xl font-bold text-slate-900 dark:text-zinc-100 mb-6">{t('dashboard')}</h1>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div className="glass-card p-6 group hover:border-indigo-300 dark:hover:border-indigo-500/20 transition-all duration-300">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-lg bg-indigo-50 dark:bg-indigo-500/10">
-              <Mail className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-            </div>
-            <div>
-              <p className="text-sm text-slate-500 dark:text-zinc-500">{t('totalEmails')}</p>
-              <p className="text-2xl font-bold text-slate-900 dark:text-zinc-100">{stats.total}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="glass-card p-6 group hover:border-amber-300 dark:hover:border-amber-500/20 transition-all duration-300">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-lg bg-amber-50 dark:bg-amber-500/10">
-              <Mail className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-            </div>
-            <div>
-              <p className="text-sm text-slate-500 dark:text-zinc-500">{t('unread')}</p>
-              <p className="text-2xl font-bold text-slate-900 dark:text-zinc-100">{stats.unread}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="glass-card p-6 group hover:border-green-300 dark:hover:border-green-500/20 transition-all duration-300">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-lg bg-green-50 dark:bg-green-500/10">
-              <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
-            </div>
-            <div>
-              <p className="text-sm text-slate-500 dark:text-zinc-500">{t('processed')}</p>
-              <p className="text-2xl font-bold text-slate-900 dark:text-zinc-100">{stats.total - stats.unread}</p>
-            </div>
-          </div>
-        </div>
+    <div className="p-6 md:p-8 animate-fadeIn space-y-6">
+      {/* Hilsen */}
+      <div>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-zinc-100">
+          {dash ? greeting(dash.user_name) : 'Dashboard'}
+        </h1>
+        {dash && (
+          <p className="text-slate-500 dark:text-zinc-500 text-sm mt-1">
+            {dash.unread > 0
+              ? `Du har ${dash.unread} ulæste emails — ${dash.high_priority > 0 ? `${dash.high_priority} med høj prioritet.` : 'ingen med høj prioritet.'}`
+              : 'Indbakken er tom. Godt arbejde!'}
+          </p>
+        )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="glass-card p-6">
-          <h2 className="text-sm font-semibold text-slate-500 dark:text-zinc-400 uppercase tracking-wider mb-4">{t('categories')}</h2>
-          <div className="space-y-3">
-            {Object.entries(stats.categories).map(([cat, count]) => (
-              <div key={cat} className="flex items-center justify-between">
-                <span className="text-sm text-slate-600 dark:text-zinc-400 capitalize">{cat}</span>
-                <span className="px-2.5 py-0.5 bg-slate-100 dark:bg-zinc-800 rounded-full text-sm font-medium text-slate-700 dark:text-zinc-300">{count}</span>
-              </div>
-            ))}
-            {Object.keys(stats.categories).length === 0 && (
-              <p className="text-sm text-slate-400 dark:text-zinc-600">{t('noData')}</p>
-            )}
+      {/* Stats-kort */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <StatCard
+          icon={<Mail className="w-5 h-5 text-indigo-500" />}
+          bg="bg-indigo-50 dark:bg-indigo-500/10"
+          label="Ulæste"
+          value={dash?.unread ?? '—'}
+          href="/inbox?is_read=false"
+        />
+        <StatCard
+          icon={<AlertTriangle className="w-5 h-5 text-red-500" />}
+          bg="bg-red-50 dark:bg-red-500/10"
+          label="Høj prioritet"
+          value={dash?.high_priority ?? '—'}
+          href="/inbox?urgency=high"
+        />
+        <StatCard
+          icon={<Sparkles className="w-5 h-5 text-purple-500" />}
+          bg="bg-purple-50 dark:bg-purple-500/10"
+          label="AI-forslag afventer"
+          value={dash?.pending_suggestions ?? '—'}
+          href="/inbox"
+        />
+        <StatCard
+          icon={<TrendingUp className="w-5 h-5 text-emerald-500" />}
+          bg="bg-emerald-50 dark:bg-emerald-500/10"
+          label="Denne uge"
+          value={dash?.week_total ?? '—'}
+          href="/inbox"
+        />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Top emails der haster */}
+        <div className="lg:col-span-2 glass-card p-5">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-semibold text-slate-500 dark:text-zinc-400 uppercase tracking-wider flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-red-500" />
+              Emails der haster
+            </h2>
+            <Link href="/inbox" className="text-xs text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+              Se alle →
+            </Link>
           </div>
+          {dash?.top_urgent && dash.top_urgent.length > 0 ? (
+            <div className="space-y-2">
+              {dash.top_urgent.map((e) => (
+                <Link
+                  key={e.id}
+                  href={`/inbox/${e.id}`}
+                  className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 dark:hover:bg-white/[0.04] border border-transparent hover:border-slate-200 dark:hover:border-white/[0.08] transition-all group"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full border flex-shrink-0 ${urgencyColor[e.urgency] || urgencyColor.low}`}>
+                      {urgencyLabel[e.urgency] || e.urgency}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-slate-700 dark:text-zinc-300 truncate">{e.subject}</p>
+                      <p className="text-xs text-slate-400 dark:text-zinc-600 truncate">{e.from_address}</p>
+                    </div>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-slate-300 dark:text-zinc-700 group-hover:text-indigo-400 transition-colors flex-shrink-0 ml-2" />
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-8 text-slate-400 dark:text-zinc-600">
+              <CheckCircle className="w-8 h-8 mb-2 text-emerald-400" />
+              <p className="text-sm">Ingen emails kræver øjeblikkelig handling</p>
+            </div>
+          )}
         </div>
 
-        <div className="glass-card p-6">
-          <h2 className="text-sm font-semibold text-slate-500 dark:text-zinc-400 uppercase tracking-wider mb-4">{t('priority')}</h2>
-          <div className="space-y-3">
-            {['high', 'medium', 'low'].map((level) => {
-              const config = urgencyConfig[level]
-              const Icon = config.icon
-              const count = stats.urgency[level] || 0
-              return (
-                <div key={level} className="flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <div className={`p-1 rounded ${config.glow}`}>
-                      <Icon className={`w-4 h-4 ${config.iconColor}`} />
+        {/* Højre kolonne: kategorier + prioriteter */}
+        <div className="space-y-4">
+          <div className="glass-card p-5">
+            <h2 className="text-sm font-semibold text-slate-500 dark:text-zinc-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+              <Inbox className="w-4 h-4" />
+              Kategorier
+            </h2>
+            <div className="space-y-2">
+              {stats && Object.entries(stats.categories).length > 0 ? (
+                Object.entries(stats.categories)
+                  .sort((a, b) => b[1] - a[1])
+                  .map(([cat, count]) => (
+                    <div key={cat} className="flex items-center justify-between">
+                      <span className="text-sm text-slate-600 dark:text-zinc-400 capitalize">{cat}</span>
+                      <div className="flex items-center gap-2">
+                        <div className="h-1.5 bg-indigo-100 dark:bg-indigo-500/20 rounded-full w-16 overflow-hidden">
+                          <div
+                            className="h-full bg-indigo-500 dark:bg-indigo-400 rounded-full"
+                            style={{ width: `${Math.min(100, (count / (stats?.total || 1)) * 100)}%` }}
+                          />
+                        </div>
+                        <span className="text-xs font-medium text-slate-500 dark:text-zinc-500 w-4 text-right">{count}</span>
+                      </div>
                     </div>
-                    <span className="text-sm text-slate-600 dark:text-zinc-400">{urgencyLabels[level]}</span>
+                  ))
+              ) : (
+                <p className="text-sm text-slate-400 dark:text-zinc-600">Ingen data endnu</p>
+              )}
+            </div>
+          </div>
+
+          <div className="glass-card p-5">
+            <h2 className="text-sm font-semibold text-slate-500 dark:text-zinc-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+              <Clock className="w-4 h-4" />
+              Prioritet
+            </h2>
+            <div className="space-y-2">
+              {[
+                { key: 'high', label: 'Høj', icon: <AlertTriangle className="w-3.5 h-3.5 text-red-500" /> },
+                { key: 'medium', label: 'Medium', icon: <Clock className="w-3.5 h-3.5 text-amber-500" /> },
+                { key: 'low', label: 'Lav', icon: <CheckCircle className="w-3.5 h-3.5 text-green-500" /> },
+              ].map(({ key, label, icon }) => (
+                <div key={key} className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    {icon}
+                    <span className="text-sm text-slate-600 dark:text-zinc-400">{label}</span>
                   </div>
-                  <span className="px-2.5 py-0.5 bg-slate-100 dark:bg-zinc-800 rounded-full text-sm font-medium text-slate-700 dark:text-zinc-300">{count}</span>
+                  <span className="text-sm font-medium text-slate-700 dark:text-zinc-300">
+                    {stats?.urgency[key] ?? 0}
+                  </span>
                 </div>
-              )
-            })}
+              ))}
+            </div>
           </div>
         </div>
       </div>
     </div>
+  )
+}
+
+function StatCard({
+  icon, bg, label, value, href,
+}: {
+  icon: React.ReactNode
+  bg: string
+  label: string
+  value: number | string
+  href: string
+}) {
+  return (
+    <Link href={href} className="glass-card p-4 flex items-center gap-3 hover:border-indigo-300 dark:hover:border-indigo-500/20 transition-all duration-300 group">
+      <div className={`p-2.5 rounded-lg ${bg} flex-shrink-0`}>
+        {icon}
+      </div>
+      <div className="min-w-0">
+        <p className="text-xs text-slate-500 dark:text-zinc-500">{label}</p>
+        <p className="text-2xl font-bold text-slate-900 dark:text-zinc-100">{value}</p>
+      </div>
+    </Link>
   )
 }

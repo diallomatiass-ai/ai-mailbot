@@ -37,7 +37,11 @@ export const api = {
     fetchApi('/auth/register', { method: 'POST', body: JSON.stringify(data) }),
   getMe: () => fetchApi('/auth/me'),
 
+  // Dashboard
+  getDashboardSummary: () => fetchApi('/emails/dashboard/summary'),
+
   // Emails
+  generateSuggestion: (id: string) => fetchApi(`/emails/${id}/generate-suggestion`, { method: 'POST' }),
   listEmails: (params?: { category?: string; urgency?: string; is_read?: boolean; skip?: number; limit?: number }) => {
     const searchParams = new URLSearchParams();
     if (params) {

@@ -1,3 +1,4 @@
+from datetime import datetime, timezone, timedelta
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -9,6 +10,7 @@ from app.database import get_db
 from app.models.user import User
 from app.models.mail_account import MailAccount
 from app.models.email_message import EmailMessage
+from app.models.ai_suggestion import AiSuggestion
 from app.schemas.email_message import EmailMessageResponse, EmailListResponse
 from app.utils.auth import get_current_user
 
@@ -120,3 +122,98 @@ async def email_stats(
     urgency = {row[0]: row[1] for row in urg_result.all()}
 
     return {"total": total, "unread": unread, "categories": categories, "urgency": urgency}
+
+
+@router.get("/dashboard/summary")
+async def dashboard_summary(
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    accounts_result = await db.execute(
+        select(MailAccount.id).where(MailAccount.user_id == user.id)
+    )
+    account_ids = [row[0] for row in accounts_result.all()]
+    if not account_ids:
+        return {
+            "unread": 0, "high_priority": 0, "pending_suggestions": 0,
+            "week_total": 0, "top_urgent": [], "user_name": user.name,
+        }
+
+    base = select(func.count()).where(EmailMessage.account_id.in_(account_ids))
+    unread = (await db.execute(base.where(EmailMessage.is_read == False))).scalar()
+    high_priority = (await db.execute(base.where(EmailMessage.urgency == "high"))).scalar()
+
+    week_ago = datetime.now(timezone.utc) - timedelta(days=7)
+    week_total = (await db.execute(
+        base.where(EmailMessage.received_at >= week_ago)
+    )).scalar()
+
+    pending_sug = (await db.execute(
+        select(func.count(AiSuggestion.id))
+        .join(EmailMessage, AiSuggestion.email_id == EmailMessage.id)
+        .where(EmailMessage.account_id.in_(account_ids), AiSuggestion.status == "pending")
+    )).scalar()
+
+    top_result = await db.execute(
+        select(EmailMessage)
+        .where(
+            EmailMessage.account_id.in_(account_ids),
+            EmailMessage.is_read == False,
+            EmailMessage.urgency.in_(["high", "medium"]),
+        )
+        .order_by(EmailMessage.urgency.desc(), EmailMessage.received_at.asc())
+        .limit(5)
+    )
+    top_emails = top_result.scalars().all()
+
+    return {
+        "user_name": user.name,
+        "unread": unread,
+        "high_priority": high_priority,
+        "pending_suggestions": pending_sug,
+        "week_total": week_total,
+        "top_urgent": [
+            {
+                "id": str(e.id),
+                "subject": e.subject or "(intet emne)",
+                "from_address": e.from_address,
+                "urgency": e.urgency,
+                "category": e.category,
+            }
+            for e in top_emails
+        ],
+    }
+
+
+@router.post("/{email_id}/generate-suggestion")
+async def generate_suggestion(
+    email_id: UUID,
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    accounts_result = await db.execute(
+        select(MailAccount.id).where(MailAccount.user_id == user.id)
+    )
+    account_ids = [row[0] for row in accounts_result.all()]
+
+    result = await db.execute(
+        select(EmailMessage)
+        .where(EmailMessage.id == email_id, EmailMessage.account_id.in_(account_ids))
+    )
+    email = result.scalar_one_or_none()
+    if not email:
+        raise HTTPException(status_code=404, detail="Email not found")
+
+    from app.services.ai_engine import generate_reply
+    reply_text = await generate_reply(email, user, db)
+
+    suggestion = AiSuggestion(
+        email_id=email.id,
+        suggested_text=reply_text,
+        status="pending",
+    )
+    db.add(suggestion)
+    email.processed = True
+    await db.commit()
+    await db.refresh(suggestion)
+    return suggestion
