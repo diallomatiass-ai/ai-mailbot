@@ -82,7 +82,7 @@ Returner JSON i dette format:
   "action": "search|summary|suggest|mark_read|generate_reply|delete|send|chat",
   "description": "Hvad du forstår kommandoen som på dansk",
   "filters": {{
-    "category": "spam|inquiry|complaint|order|support|other eller null",
+    "category": "tilbud|booking|reklamation|faktura|leverandor|intern|spam|andet eller null",
     "is_read": true/false/null,
     "from_address": "email eller null",
     "search_text": "søgetekst eller null",

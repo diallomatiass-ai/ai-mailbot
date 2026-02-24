@@ -26,11 +26,19 @@ def build_classification_prompt(email_subject: str, email_body: str) -> str:
     Returns:
         A fully-formed classification prompt string.
     """
-    return f"""You are an email classification assistant. Analyze the following email and return a JSON object with exactly these four fields:
+    return f"""You are an email classification assistant for a Danish craftsman business. Analyze the following email and return a JSON object with exactly these four fields:
 
-- "category": one of "inquiry", "complaint", "order", "support", "spam", "other"
+- "category": one of "tilbud", "booking", "reklamation", "faktura", "leverandor", "intern", "spam", "andet"
+  - tilbud: price inquiry or quote request
+  - booking: wants to book a job or meeting
+  - reklamation: complaint about completed work
+  - faktura: invoice or payment related
+  - leverandor: from suppliers or wholesalers
+  - intern: from own employees or internal
+  - spam: advertisements or unwanted
+  - andet: cannot be classified
 - "urgency": one of "high", "medium", "low"
-- "topic": a short description of the email topic (max 10 words)
+- "topic": a short description of the email topic in Danish (max 10 words)
 - "confidence": a float between 0.0 and 1.0 indicating your confidence
 
 Return ONLY valid JSON. No explanations, no markdown formatting, no code fences.

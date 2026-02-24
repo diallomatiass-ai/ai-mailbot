@@ -3,12 +3,14 @@
 import { useTranslation } from '@/lib/i18n'
 
 const categoryColors: Record<string, string> = {
-  inquiry: 'bg-blue-50 dark:bg-blue-500/15 text-blue-600 dark:text-blue-400',
-  complaint: 'bg-red-50 dark:bg-red-500/15 text-red-600 dark:text-red-400',
-  order: 'bg-green-50 dark:bg-green-500/15 text-green-600 dark:text-green-400',
-  support: 'bg-amber-50 dark:bg-amber-500/15 text-amber-600 dark:text-amber-400',
+  tilbud: 'bg-blue-50 dark:bg-blue-500/15 text-blue-600 dark:text-blue-400',
+  booking: 'bg-green-50 dark:bg-green-500/15 text-green-600 dark:text-green-400',
+  reklamation: 'bg-red-50 dark:bg-red-500/15 text-red-600 dark:text-red-400',
+  faktura: 'bg-amber-50 dark:bg-amber-500/15 text-amber-600 dark:text-amber-400',
+  leverandor: 'bg-indigo-50 dark:bg-indigo-500/15 text-indigo-600 dark:text-indigo-400',
+  intern: 'bg-teal-50 dark:bg-teal-500/15 text-teal-600 dark:text-teal-400',
   spam: 'bg-slate-100 dark:bg-zinc-700/50 text-slate-500 dark:text-zinc-500',
-  other: 'bg-purple-50 dark:bg-purple-500/15 text-purple-600 dark:text-purple-400',
+  andet: 'bg-purple-50 dark:bg-purple-500/15 text-purple-600 dark:text-purple-400',
 }
 
 const urgencyDots: Record<string, string> = {

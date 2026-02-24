@@ -137,12 +137,12 @@ def _parse_classification_response(raw: str) -> dict:
             return _default_classification()
 
     # Validate and normalize fields
-    valid_categories = {"inquiry", "complaint", "order", "support", "spam", "other"}
+    valid_categories = {"tilbud", "booking", "reklamation", "faktura", "leverandor", "intern", "spam", "andet"}
     valid_urgencies = {"high", "medium", "low"}
 
-    category = str(data.get("category", "other")).lower()
+    category = str(data.get("category", "andet")).lower()
     if category not in valid_categories:
-        category = "other"
+        category = "andet"
 
     urgency = str(data.get("urgency", "medium")).lower()
     if urgency not in valid_urgencies:
@@ -167,7 +167,7 @@ def _parse_classification_response(raw: str) -> dict:
 def _default_classification() -> dict:
     """Return safe default classification values."""
     return {
-        "category": "other",
+        "category": "andet",
         "urgency": "medium",
         "topic": "",
         "confidence": 0.0,

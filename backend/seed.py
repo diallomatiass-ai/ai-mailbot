@@ -49,20 +49,20 @@ async def seed():
         # --- Emails (14 stk) ---
         now = datetime.now(timezone.utc)
         emails_data = [
-            ("kunde@firma.dk", "Spørgsmål om levering", "Hvornår kan jeg forvente min pakke? Bestilte for 3 dage siden.", "inquiry", "high"),
-            ("peter@gmail.com", "Faktura mangler", "Jeg har ikke modtaget min faktura for bestilling #1234.", "inquiry", "medium"),
-            ("lars@virksomhed.dk", "Klage over produkt", "Produktet jeg modtog var beskadiget. Jeg er meget utilfreds.", "complaint", "high"),
-            ("mia@hotmail.com", "Tilbud på bulk-ordre", "Vi ønsker at bestille 500 enheder. Kan I give en pris?", "order", "high"),
-            ("info@butik.dk", "Teknisk problem med login", "Jeg kan ikke logge ind på min konto. Adgangskoden virker ikke.", "support", "medium"),
-            ("anders@company.com", "Returneringsprocedure", "Hvordan returnerer jeg et produkt? Det passer ikke til formålet.", "inquiry", "low"),
-            ("sofia@mail.dk", "Tak for god service", "Vil bare sige tusind tak for den hurtige og professionelle hjælp!", "other", "low"),
-            ("thomas@gmail.com", "Pris på forsendelse", "Hvad koster det at sende til Sverige?", "inquiry", "low"),
-            ("anne@firma.dk", "Abonnement opsigelse", "Jeg ønsker at opsige mit abonnement fra næste måned.", "support", "medium"),
-            ("jens@outlook.com", "Manglende vare i ordre", "Min ordre mangler 2 af de 5 bestilte varer.", "complaint", "high"),
-            ("nina@yahoo.dk", "Spørgsmål om garanti", "Hvor lang er garantiperioden på jeres produkter?", "inquiry", "low"),
-            ("david@startup.io", "Samarbejdsforespørgsel", "Vi er interesserede i at indgå et forhandlersamarbejde.", "other", "medium"),
-            ("maria@private.dk", "Opdatering af adresse", "Jeg er flyttet og vil gerne opdatere min leveringsadresse.", "support", "low"),
-            ("spam@promo.com", "Vind en iPhone!", "Klik her for at vinde en gratis iPhone!!!", "spam", "low"),
+            ("lars@toemrerfirma.dk", "Prisforespørgsel på køkkenrenovering", "Hej, vi overvejer at renovere vores køkken. Kan I give et tilbud på arbejdet? Ca. 15 m².", "tilbud", "high"),
+            ("mia@privat.dk", "Booking af maler", "Jeg vil gerne booke jer til at male stue og gang, ca. 80 m². Hvornår er I ledige?", "booking", "high"),
+            ("peter@gmail.com", "Klage over udført arbejde", "Det tag I lagde for 2 uger siden lækker allerede. Jeg er meget utilfreds og forventer I retter det.", "reklamation", "high"),
+            ("info@grossisten.dk", "Faktura #4521 forfalden", "Vi henleder opmærksomheden på, at faktura #4521 på kr. 8.750 er forfalden til betaling.", "faktura", "high"),
+            ("thomas@bygge.dk", "Ny leverandøraftale", "Vi er et nyt grossistfirma og ønsker at præsentere vores sortiment af byggematerialer.", "leverandor", "medium"),
+            ("henrik@firma.dk", "Tilbud på badeværelse", "Hvad koster det at omlægge et badeværelse på 6 m²? Inkl. fliser og sanitet.", "tilbud", "high"),
+            ("anne@privat.dk", "Booking af elektriker", "Har brug for hjælp til at sætte en ny elinstallation op i bryggers. Hvornår kan I komme?", "booking", "medium"),
+            ("jens@outlook.com", "Reklamation — revnede fliser", "De fliser I lagde i gangen er begyndt at revne. Det er kun 3 måneder siden I var her.", "reklamation", "high"),
+            ("sofia@mail.dk", "Betaling for faktura #3312", "Vedhæfter betalingsbekræftelse for faktura #3312. Tak for godt arbejde!", "faktura", "low"),
+            ("leverandor@ror.dk", "Nyt rørfitting-sortiment 2026", "Kære kunde, vi præsenterer hermed vores nye sortiment af VVS-fittings til priser fra 12 kr.", "leverandor", "low"),
+            ("michael@toemrerfirma.dk", "Sygemelding fredag", "Hej chef, jeg er desværre syg og kan ikke møde fredag. Hilsen Michael.", "intern", "medium"),
+            ("david@firma.dk", "Tilbud på tagudskiftning", "Vi har et ca. 200 m² hus og taget skal skiftes. Hvad er jeres pris for tagtjærepap + arbejde?", "tilbud", "high"),
+            ("nina@yahoo.dk", "Booking: Haveplanlægning", "Kan I komme og se på vores have? Vi vil gerne have den omlagt med nye belægningssten.", "booking", "medium"),
+            ("spam@promo.com", "Tjen 10.000 kr hjemmefra!", "Klik her for at lære hemmeligheden bag passiv indkomst!! Gratis webinar!!!", "spam", "low"),
         ]
 
         email_objects = []

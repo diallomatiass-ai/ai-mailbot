@@ -22,11 +22,9 @@ export default function TemplatesPage() {
   const [form, setForm] = useState({ name: '', category: '', body: '' })
 
   const categoryLabels: Record<string, string> = {
-    inquiry: t('inquiry'),
-    complaint: t('complaint'),
-    order: t('order'),
-    support: t('support'),
-    other: t('other'),
+    tilbud: t('tilbud'), booking: t('booking'), reklamation: t('reklamation'),
+    faktura: t('faktura'), leverandor: t('leverandor'), intern: t('intern'),
+    spam: t('spam'), andet: t('andet'),
   }
 
   const fetchTemplates = async () => {

@@ -6,7 +6,7 @@ import { api } from '@/lib/api'
 import InboxList from '@/components/InboxList'
 import { useTranslation } from '@/lib/i18n'
 
-const categories = ['inquiry', 'complaint', 'order', 'support', 'spam', 'other']
+const categories = ['tilbud', 'booking', 'reklamation', 'faktura', 'leverandor', 'intern', 'spam', 'andet']
 const urgencies = ['high', 'medium', 'low']
 
 export default function InboxPage() {
@@ -18,8 +18,9 @@ export default function InboxPage() {
   const [activeUrgency, setActiveUrgency] = useState<string | null>(null)
 
   const categoryLabels: Record<string, string> = {
-    inquiry: t('inquiry'), complaint: t('complaint'), order: t('order'),
-    support: t('support'), spam: t('spam'), other: t('other'),
+    tilbud: t('tilbud'), booking: t('booking'), reklamation: t('reklamation'),
+    faktura: t('faktura'), leverandor: t('leverandor'), intern: t('intern'),
+    spam: t('spam'), andet: t('andet'),
   }
   const urgencyLabels: Record<string, string> = { high: t('high'), medium: t('medium'), low: t('low') }
 
