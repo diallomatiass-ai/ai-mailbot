@@ -78,7 +78,7 @@ export default function TemplatesPage() {
   }
 
   return (
-    <div className="p-8 max-w-4xl animate-fadeIn">
+    <div className="p-8 animate-fadeIn">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-slate-900 dark:text-zinc-100">{t('templates')}</h1>
         <button

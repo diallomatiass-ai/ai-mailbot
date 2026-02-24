@@ -55,6 +55,14 @@
     background-color: var(--bg);
     color: var(--text-primary);
     transition: background-color 0.3s ease, color 0.3s ease;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Subtil baggrund med dybde */
+  .dark body {
+    background-image: radial-gradient(ellipse 80% 60% at 50% -20%, rgba(99,102,241,0.06) 0%, transparent 60%);
   }
 
   ::-webkit-scrollbar {
@@ -89,8 +97,21 @@
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--card-border);
-    border-radius: 0.75rem;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    border-radius: 0.875rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.04);
+    transition: background-color 0.3s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .dark .glass-card {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2), 0 4px 16px rgba(0,0,0,0.15);
+  }
+
+  .glass-card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.06);
+  }
+
+  .dark .glass-card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2);
   }
 
   .gradient-border {
@@ -147,15 +168,23 @@
   .btn-primary {
     @apply px-4 py-2 text-sm font-medium text-white rounded-lg transition-all;
     background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1), 0 0 0 1px rgba(99,102,241,0.2);
   }
 
   .btn-primary:hover {
     background: linear-gradient(135deg, #818cf8, #a78bfa);
-    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.35), 0 0 0 1px rgba(99,102,241,0.3);
+    transform: translateY(-1px);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
   }
 
   .btn-primary:disabled {
     opacity: 0.5;
+    transform: none;
+    box-shadow: none;
   }
 
   /* Theme-aware text helpers */

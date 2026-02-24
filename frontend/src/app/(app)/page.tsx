@@ -58,7 +58,7 @@ export default function Dashboard() {
   }, [])
 
   return (
-    <div className="p-6 md:p-8 animate-fadeIn space-y-6">
+    <div className="p-6 md:p-8 animate-fadeIn space-y-6 max-w-none w-full">
       {/* Hilsen */}
       <div>
         <h1 className="text-2xl font-bold text-slate-900 dark:text-zinc-100">
@@ -80,14 +80,16 @@ export default function Dashboard() {
           bg="bg-indigo-50 dark:bg-indigo-500/10"
           label="Ulæste"
           value={dash?.unread ?? '—'}
-          href="/inbox?is_read=false"
+          href="/inbox"
+          accent="border-indigo-500"
         />
         <StatCard
           icon={<AlertTriangle className="w-5 h-5 text-red-500" />}
           bg="bg-red-50 dark:bg-red-500/10"
           label="Høj prioritet"
           value={dash?.high_priority ?? '—'}
-          href="/inbox?urgency=high"
+          href="/inbox"
+          accent="border-red-500"
         />
         <StatCard
           icon={<Sparkles className="w-5 h-5 text-purple-500" />}
@@ -95,6 +97,7 @@ export default function Dashboard() {
           label="AI-forslag afventer"
           value={dash?.pending_suggestions ?? '—'}
           href="/inbox"
+          accent="border-purple-500"
         />
         <StatCard
           icon={<TrendingUp className="w-5 h-5 text-emerald-500" />}
@@ -102,6 +105,7 @@ export default function Dashboard() {
           label="Denne uge"
           value={dash?.week_total ?? '—'}
           href="/inbox"
+          accent="border-emerald-500"
         />
       </div>
 
@@ -207,22 +211,26 @@ export default function Dashboard() {
 }
 
 function StatCard({
-  icon, bg, label, value, href,
+  icon, bg, label, value, href, accent,
 }: {
   icon: React.ReactNode
   bg: string
   label: string
   value: number | string
   href: string
+  accent: string
 }) {
   return (
-    <Link href={href} className="glass-card p-4 flex items-center gap-3 hover:border-indigo-300 dark:hover:border-indigo-500/20 transition-all duration-300 group">
-      <div className={`p-2.5 rounded-lg ${bg} flex-shrink-0`}>
+    <Link
+      href={href}
+      className={`glass-card p-5 flex items-center gap-4 transition-all duration-200 group border-l-[3px] ${accent} hover:scale-[1.01]`}
+    >
+      <div className={`p-3 rounded-xl ${bg} flex-shrink-0`}>
         {icon}
       </div>
       <div className="min-w-0">
-        <p className="text-xs text-slate-500 dark:text-zinc-500">{label}</p>
-        <p className="text-2xl font-bold text-slate-900 dark:text-zinc-100">{value}</p>
+        <p className="text-xs font-medium text-slate-500 dark:text-zinc-500 uppercase tracking-wide">{label}</p>
+        <p className="text-3xl font-bold text-slate-900 dark:text-zinc-100 mt-0.5">{value}</p>
       </div>
     </Link>
   )

@@ -71,58 +71,65 @@ export default function EmailPage() {
           </button>
         )}
       </div>
-      <div className="flex-1 overflow-auto p-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl">
-          <div className="lg:col-span-2 glass-card p-6">
+      <div className="flex-1 flex overflow-hidden">
+        {/* Email-indhold — ruller selv */}
+        <div className="flex-1 overflow-y-auto p-6">
+          <div className="glass-card p-6 h-fit">
             <EmailDetail email={email} />
           </div>
-          <div className="space-y-4">
+        </div>
+
+        {/* AI-panel — fast bredde, ruller selv */}
+        <div className="w-80 flex-shrink-0 border-l border-slate-200 dark:border-white/[0.06] overflow-y-auto p-4 space-y-4 bg-slate-50/50 dark:bg-zinc-900/30">
+          <div className="flex items-center justify-between">
             <h3 className="text-xs font-semibold text-slate-500 dark:text-zinc-500 uppercase tracking-wider">{t('aiSuggestions')}</h3>
-            {hasSuggestions ? (
-              email.suggestions.map((s: any) => (
-                <AiSuggestionCard key={s.id} suggestion={s} onAction={handleAction} onSend={handleSend} />
-              ))
-            ) : (
-              <div className="glass-card p-4 text-sm text-slate-400 dark:text-zinc-600">
-                <p className="mb-3">{email.processed ? t('noSuggestions') : t('awaitingAi')}</p>
-                <button
-                  onClick={handleGenerate}
-                  disabled={generating}
-                  className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-lg bg-indigo-100 dark:bg-indigo-500/20 hover:bg-indigo-200 dark:hover:bg-indigo-500/30 text-indigo-700 dark:text-indigo-300 disabled:opacity-50 transition-colors"
-                >
-                  {generating ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
-                  {generating ? 'Genererer...' : 'Generer AI-forslag nu'}
-                </button>
-              </div>
-            )}
-            {email.category && (
-              <div className="glass-card p-4">
-                <h4 className="text-sm font-medium text-slate-600 dark:text-zinc-400 mb-3">{t('classification')}</h4>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-slate-400 dark:text-zinc-600">{t('category')}</span>
-                    <span className="font-medium text-slate-700 dark:text-zinc-300 capitalize">{email.category}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-400 dark:text-zinc-600">{t('priority')}</span>
-                    <span className="font-medium text-slate-700 dark:text-zinc-300 capitalize">{email.urgency}</span>
-                  </div>
-                  {email.topic && (
-                    <div className="flex justify-between">
-                      <span className="text-slate-400 dark:text-zinc-600">{t('topic')}</span>
-                      <span className="font-medium text-slate-700 dark:text-zinc-300">{email.topic}</span>
-                    </div>
-                  )}
-                  {email.confidence != null && (
-                    <div className="flex justify-between">
-                      <span className="text-slate-400 dark:text-zinc-600">{t('confidence')}</span>
-                      <span className="font-medium text-indigo-600 dark:text-indigo-400">{Math.round(email.confidence * 100)}%</span>
-                    </div>
-                  )}
-                </div>
-              </div>
+            {!hasSuggestions && (
+              <button
+                onClick={handleGenerate}
+                disabled={generating}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-50 transition-colors"
+              >
+                {generating ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
+                {generating ? 'Genererer...' : 'Generer'}
+              </button>
             )}
           </div>
+          {hasSuggestions ? (
+            email.suggestions.map((s: any) => (
+              <AiSuggestionCard key={s.id} suggestion={s} onAction={handleAction} onSend={handleSend} />
+            ))
+          ) : (
+            <div className="glass-card p-4 text-sm text-slate-400 dark:text-zinc-600">
+              <p>{email.processed ? t('noSuggestions') : t('awaitingAi')}</p>
+            </div>
+          )}
+          {email.category && (
+            <div className="glass-card p-4">
+              <h4 className="text-xs font-semibold text-slate-500 dark:text-zinc-400 uppercase tracking-wider mb-3">{t('classification')}</h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-slate-400 dark:text-zinc-600">{t('category')}</span>
+                  <span className="font-medium text-slate-700 dark:text-zinc-300 capitalize">{email.category}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-400 dark:text-zinc-600">{t('priority')}</span>
+                  <span className="font-medium text-slate-700 dark:text-zinc-300 capitalize">{email.urgency}</span>
+                </div>
+                {email.topic && (
+                  <div className="flex justify-between">
+                    <span className="text-slate-400 dark:text-zinc-600">{t('topic')}</span>
+                    <span className="font-medium text-slate-700 dark:text-zinc-300 text-right max-w-[60%]">{email.topic}</span>
+                  </div>
+                )}
+                {email.confidence != null && (
+                  <div className="flex justify-between">
+                    <span className="text-slate-400 dark:text-zinc-600">{t('confidence')}</span>
+                    <span className="font-medium text-indigo-600 dark:text-indigo-400">{Math.round(email.confidence * 100)}%</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

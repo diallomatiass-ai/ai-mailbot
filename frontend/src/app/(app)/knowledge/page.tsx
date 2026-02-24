@@ -76,7 +76,7 @@ export default function KnowledgePage() {
   }
 
   return (
-    <div className="p-8 max-w-4xl animate-fadeIn">
+    <div className="p-8 animate-fadeIn">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2.5">
           <div className="p-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-500/10">

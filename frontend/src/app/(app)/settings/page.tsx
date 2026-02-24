@@ -57,7 +57,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="p-8 max-w-3xl animate-fadeIn">
+    <div className="p-8 animate-fadeIn">
       <div className="flex items-center gap-2.5 mb-6">
         <div className="p-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-500/10">
           <Settings className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
