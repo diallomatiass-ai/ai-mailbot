@@ -111,7 +111,7 @@ export default function InboxPage() {
       {/* Split-pane */}
       <div className="flex-1 flex overflow-hidden">
         {/* Venstre: email-liste */}
-        <div className="w-80 flex-shrink-0 border-r border-slate-200 dark:border-white/[0.06] overflow-y-auto">
+        <div className="w-72 flex-shrink-0 border-r border-slate-200 dark:border-white/[0.06] overflow-y-auto">
           {loading ? (
             <div className="p-6 text-center text-slate-400 dark:text-zinc-600 text-sm">{t('loading')}</div>
           ) : (
@@ -129,7 +129,7 @@ export default function InboxPage() {
               </div>
 
               {/* AI-panel */}
-              <div className="w-80 flex-shrink-0 border-l border-slate-200 dark:border-white/[0.06] overflow-y-auto p-4 space-y-4 bg-slate-50/50 dark:bg-zinc-900/30">
+              <div className="w-96 flex-shrink-0 border-l border-slate-200 dark:border-white/[0.06] overflow-y-auto p-4 space-y-4 bg-slate-50/50 dark:bg-zinc-900/30">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-semibold text-slate-500 dark:text-zinc-400 uppercase tracking-wider">{t('aiSuggestions')}</h3>
                   {!hasSuggestions && (
