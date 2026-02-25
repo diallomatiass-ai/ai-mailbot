@@ -59,7 +59,7 @@ export default function AfmeldPage() {
         <div className="flex justify-center mb-8">
           <Image
             src={theme === 'dark' ? '/logo-dark.png' : '/logo.png'}
-            alt="Ahmes"
+            alt="Coas"
             width={100}
             height={30}
             className="object-contain opacity-60"
@@ -77,7 +77,7 @@ export default function AfmeldPage() {
               </h1>
               <p className="text-sm text-slate-500 dark:text-zinc-500 leading-relaxed">
                 <span className="font-medium text-slate-700 dark:text-zinc-300">{email}</span> modtager
-                ikke flere emails fra Ahmes. Det kan tage op til 48 timer.
+                ikke flere emails fra Coas. Det kan tage op til 48 timer.
               </p>
               <p className="text-xs text-slate-400 dark:text-zinc-600 mt-4">
                 Fortryder du?{' '}
@@ -93,7 +93,7 @@ export default function AfmeldPage() {
                 <MailX className="w-7 h-7 text-slate-500 dark:text-zinc-400" />
               </div>
               <h1 className="text-xl font-bold text-slate-900 dark:text-zinc-100 mb-2">
-                Afmeld emails fra Ahmes
+                Afmeld emails fra Coas
               </h1>
               <p className="text-sm text-slate-500 dark:text-zinc-500 mb-6 leading-relaxed">
                 {email
@@ -136,7 +136,7 @@ export default function AfmeldPage() {
         </div>
 
         <p className="text-center text-xs text-slate-400 dark:text-zinc-600 mt-6">
-          Ahmes AI · GDPR-venlig dansk tjeneste ·{' '}
+          Coas · GDPR-venlig dansk tjeneste ·{' '}
           <a href="mailto:hej@ahmes.dk" className="hover:text-indigo-500 transition-colors">
             hej@ahmes.dk
           </a>

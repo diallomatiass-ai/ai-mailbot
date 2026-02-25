@@ -44,7 +44,7 @@ export default function VideoPage({ params }: Props) {
       <nav className="relative z-10 flex items-center justify-center px-6 py-5">
         <Image
           src={theme === 'dark' ? '/logo-dark.png' : '/logo.png'}
-          alt="Ahmes"
+          alt="Coas"
           width={120}
           height={36}
           className="object-contain"
@@ -63,7 +63,7 @@ export default function VideoPage({ params }: Props) {
             Hej {displayName} 👋
           </h1>
           <p className="text-lg text-slate-600 dark:text-zinc-400 leading-relaxed">
-            Jeg viser dig præcis, hvordan Ahmes kan spare dig{' '}
+            Jeg viser dig præcis, hvordan Coas kan spare dig{' '}
             <span className="font-semibold text-slate-800 dark:text-zinc-200">50 minutter om dagen</span>{' '}
             på kundemails.
           </p>

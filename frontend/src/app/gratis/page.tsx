@@ -60,7 +60,7 @@ export default function GratisPage() {
       <nav className="relative z-10 flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
         <Image
           src={theme === 'dark' ? '/logo-dark.png' : '/logo.png'}
-          alt="Ahmes"
+          alt="Coas"
           width={120}
           height={36}
           className="object-contain"
@@ -338,7 +338,7 @@ export default function GratisPage() {
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-slate-200 dark:border-zinc-800 mt-16 py-8 text-center text-xs text-slate-400 dark:text-zinc-600">
-        © {new Date().getFullYear()} Ahmes AI · Dansk AI-assistent til erhvervsmails ·{' '}
+        © {new Date().getFullYear()} Coas · Din AI-assistent ·{' '}
         <a href="#" className="hover:text-indigo-500 transition-colors">Privatlivspolitik</a>
         {' '}·{' '}
         <a href="/afmeld" className="hover:text-indigo-500 transition-colors">Afmeld emails</a>

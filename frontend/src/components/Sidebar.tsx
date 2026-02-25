@@ -24,7 +24,7 @@ export default function Sidebar() {
         <div className="flex items-center justify-center">
           <Image
             src={theme === 'dark' ? '/logo-dark.png' : '/logo.png'}
-            alt="Ahmes"
+            alt="Coas"
             width={150}
             height={90}
             className="object-contain"

@@ -39,7 +39,7 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <Image
             src={theme === 'dark' ? '/logo-dark.png' : '/logo.png'}
-            alt="Ahmes"
+            alt="Coas"
             width={110}
             height={33}
             className="object-contain"
@@ -80,7 +80,7 @@ export default function LandingPage() {
           </h1>
 
           <p className="text-xl text-slate-600 dark:text-zinc-400 leading-relaxed mb-10 max-w-2xl mx-auto">
-            Ahmes læser, klassificerer og foreslår svar på dine kundemails.
+            Coas læser, klassificerer og foreslår svar på dine kundemails.
             Du godkender med ét klik. Al data forbliver lokalt.
           </p>
 
@@ -295,7 +295,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="relative z-10 border-t border-slate-200 dark:border-zinc-800 py-8">
         <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400 dark:text-zinc-600">
-          <span>© {new Date().getFullYear()} Ahmes AI — Dansk AI-assistent til erhvervsmails</span>
+          <span>© {new Date().getFullYear()} Coas — Din AI-assistent</span>
           <div className="flex gap-5">
             <a href="#" className="hover:text-indigo-500 transition-colors">Privatlivspolitik</a>
             <a href="#" className="hover:text-indigo-500 transition-colors">Vilkår</a>

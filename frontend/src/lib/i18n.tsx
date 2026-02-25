@@ -8,7 +8,7 @@ export type Theme = 'light' | 'dark'
 const translations = {
   da: {
     // App
-    appName: 'Ahmes',
+    appName: 'Coas',
     appDesc: 'AI-drevet email assistent',
     version: 'v1.0',
 
@@ -142,7 +142,7 @@ const translations = {
   },
   en: {
     // App
-    appName: 'Ahmes',
+    appName: 'Coas',
     appDesc: 'AI-powered email assistant',
     version: 'v1.0',
 

@@ -6,7 +6,7 @@ import { I18nProvider } from '@/lib/i18n'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Ahmes - AI Mailbot Assistant',
+  title: 'Coas — Din AI-assistent',
   description: 'AI-powered email assistant',
   icons: {
     icon: '/logo.png',
