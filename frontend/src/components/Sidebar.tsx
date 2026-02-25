@@ -11,7 +11,7 @@ export default function Sidebar() {
   const { t, theme, setTheme } = useTranslation()
 
   const navItems = [
-    { href: '/', label: t('dashboard'), icon: LayoutDashboard },
+    { href: '/dashboard', label: t('dashboard'), icon: LayoutDashboard },
     { href: '/inbox', label: t('inbox'), icon: Inbox },
     { href: '/templates', label: t('templates'), icon: FileText },
     { href: '/knowledge', label: t('knowledgeBase'), icon: BookOpen },
@@ -35,7 +35,7 @@ export default function Sidebar() {
         {navItems.map((item) => {
           const Icon = item.icon
           const isActive = pathname === item.href ||
-            (item.href !== '/' && pathname.startsWith(item.href))
+            (item.href !== '/dashboard' && pathname.startsWith(item.href))
           return (
             <Link
               key={item.href}

@@ -32,7 +32,7 @@ export default function GratisPage() {
       const data = await api.login(email, password)
       localStorage.setItem('token', data.access_token)
       setStep('success')
-      setTimeout(() => { window.location.href = '/' }, 3000)
+      setTimeout(() => { window.location.href = '/dashboard' }, 3000)
     } catch (err: any) {
       setError(err.message || 'Noget gik galt. Prøv igen.')
     } finally {

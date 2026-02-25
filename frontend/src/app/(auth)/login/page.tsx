@@ -23,12 +23,12 @@ export default function LoginPage() {
       if (isLogin) {
         const data = await api.login(email, password)
         localStorage.setItem('token', data.access_token)
-        window.location.href = '/'
+        window.location.href = '/dashboard'
       } else {
         await api.register({ email, name, password, company_name: companyName || undefined })
         const data = await api.login(email, password)
         localStorage.setItem('token', data.access_token)
-        window.location.href = '/'
+        window.location.href = '/dashboard'
       }
     } catch (err: any) {
       setError(err.message || t('somethingWrong'))
