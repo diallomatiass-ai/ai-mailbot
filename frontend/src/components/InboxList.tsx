@@ -7,10 +7,10 @@ const categoryColors: Record<string, string> = {
   booking: 'bg-green-50 dark:bg-green-500/15 text-green-600 dark:text-green-400',
   reklamation: 'bg-red-50 dark:bg-red-500/15 text-red-600 dark:text-red-400',
   faktura: 'bg-amber-50 dark:bg-amber-500/15 text-amber-600 dark:text-amber-400',
-  leverandor: 'bg-indigo-50 dark:bg-indigo-500/15 text-indigo-600 dark:text-indigo-400',
+  leverandor: 'bg-teal-50 dark:bg-accent/15 text-brand-navy dark:text-accent',
   intern: 'bg-teal-50 dark:bg-teal-500/15 text-teal-600 dark:text-teal-400',
   spam: 'bg-slate-100 dark:bg-zinc-700/50 text-slate-500 dark:text-zinc-500',
-  andet: 'bg-purple-50 dark:bg-purple-500/15 text-purple-600 dark:text-purple-400',
+  andet: 'bg-teal-50 dark:bg-accent/15 text-brand-navy dark:text-accent',
 }
 
 const urgencyDots: Record<string, string> = {
@@ -54,13 +54,13 @@ export default function InboxList({ emails, onSelect, selectedId }: Props) {
           onClick={() => onSelect(email.id)}
           className={`w-full text-left px-4 py-3 transition-all duration-200 flex items-start gap-3 ${
             selectedId === email.id
-              ? 'bg-indigo-50 dark:bg-indigo-500/10 border-l-2 border-l-indigo-500'
+              ? 'bg-teal-50 dark:bg-accent/10 border-l-2 border-l-accent'
               : 'hover:bg-slate-50 dark:hover:bg-white/[0.03] border-l-2 border-l-transparent'
           }`}
         >
           <div className="pt-1.5 flex-shrink-0">
             {!email.is_read ? (
-              <div className="w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse-glow" />
+              <div className="w-2.5 h-2.5 rounded-full bg-accent animate-pulse-glow" />
             ) : (
               <div className="w-2.5 h-2.5" />
             )}
@@ -82,7 +82,7 @@ export default function InboxList({ emails, onSelect, selectedId }: Props) {
                 </span>
               )}
               {email.urgency && <div className={`w-2 h-2 rounded-full ${urgencyDots[email.urgency] || ''}`} />}
-              {email.has_suggestion && <span className="text-xs text-indigo-600 dark:text-indigo-400 font-medium">AI</span>}
+              {email.has_suggestion && <span className="text-xs text-brand-navy dark:text-accent font-medium">AI</span>}
               {email.is_replied && <span className="text-xs text-green-600 dark:text-green-400">{t('replied')}</span>}
             </div>
           </div>

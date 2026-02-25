@@ -42,11 +42,11 @@ export default function Sidebar() {
               href={item.href}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                 isActive
-                  ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 shadow-[inset_0_0_0_1px_rgba(99,102,241,0.15)]'
+                  ? 'bg-teal-50 dark:bg-accent/10 text-brand-navy dark:text-accent shadow-[inset_0_0_0_1px_rgba(66,209,185,0.15)]'
                   : 'text-slate-500 dark:text-zinc-400 hover:bg-slate-50 dark:hover:bg-white/[0.04] hover:text-slate-800 dark:hover:text-zinc-200'
               }`}
             >
-              <Icon className={`w-5 h-5 ${isActive ? 'text-indigo-600 dark:text-indigo-400' : ''}`} />
+              <Icon className={`w-5 h-5 ${isActive ? 'text-brand-navy dark:text-accent' : ''}`} />
               {item.label}
             </Link>
           )

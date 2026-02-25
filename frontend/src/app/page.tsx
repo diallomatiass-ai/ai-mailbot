@@ -22,8 +22,8 @@ export default function LandingPage() {
     <div className="min-h-screen bg-slate-50 dark:bg-[#09090b]">
       {/* Baggrunds-effekter */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[700px] rounded-full bg-indigo-500/8 blur-[160px]" />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[400px] rounded-full bg-purple-500/5 blur-[130px]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[700px] rounded-full bg-accent/8 blur-[160px]" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[400px] rounded-full bg-brand-teal/10 blur-[130px]" />
         <div
           className="absolute inset-0 opacity-[0.02]"
           style={{
@@ -67,14 +67,14 @@ export default function LandingPage() {
 
         {/* Hero */}
         <section className="max-w-6xl mx-auto px-6 pt-20 pb-24 text-center animate-slideUp">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20 text-indigo-700 dark:text-indigo-400 text-sm font-medium mb-8">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 dark:bg-accent/10 border border-accent/30 dark:border-accent/20 text-brand-navy dark:text-accent text-sm font-medium mb-8">
             <Sparkles className="w-3.5 h-3.5" />
             GDPR-venlig AI til danske virksomheder
           </div>
 
           <h1 className="text-5xl md:text-6xl font-bold text-slate-900 dark:text-zinc-50 leading-[1.1] mb-6 max-w-3xl mx-auto">
             Stop med at bruge
-            <span className="block bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-brand-navy via-brand-teal to-brand-teal bg-clip-text text-transparent">
               en time om dagen på mails
             </span>
           </h1>
@@ -103,7 +103,7 @@ export default function LandingPage() {
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-8 text-sm text-slate-500 dark:text-zinc-500">
             {['Ingen kreditkort', 'Fungerer med Gmail og Outlook', 'Annullér når som helst'].map((t) => (
               <div key={t} className="flex items-center gap-1.5">
-                <CheckCircle className="w-4 h-4 text-indigo-500" />
+                <CheckCircle className="w-4 h-4 text-accent" />
                 {t}
               </div>
             ))}
@@ -116,13 +116,13 @@ export default function LandingPage() {
             {[
               {
                 icon: Mail,
-                color: 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400',
+                color: 'bg-teal-50 dark:bg-accent/10 text-brand-navy dark:text-accent',
                 title: 'Automatisk klassificering',
                 desc: 'Tilbud, bookinger, reklamationer, fakturaer — sorteres automatisk når mailen lander i indbakken.',
               },
               {
                 icon: Zap,
-                color: 'bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400',
+                color: 'bg-teal-50 dark:bg-accent/10 text-brand-navy dark:text-accent',
                 title: 'Svarforslag på 3 sekunder',
                 desc: 'AI skriver et udkast i din tone baseret på din videnbase og dine tidligere svar.',
               },
@@ -179,7 +179,7 @@ export default function LandingPage() {
               ].map(({ step, icon: Icon, title, desc }) => (
                 <div key={step} className="flex gap-5">
                   <div className="flex-shrink-0">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand-navy to-brand-teal flex items-center justify-center text-white font-bold text-lg">
                       {step}
                     </div>
                   </div>
@@ -231,10 +231,10 @@ export default function LandingPage() {
               ].map(({ name, price, desc, features, highlight }) => (
                 <div
                   key={name}
-                  className={`glass-card p-6 flex flex-col ${highlight ? 'ring-2 ring-indigo-500/50 dark:ring-indigo-400/40' : ''}`}
+                  className={`glass-card p-6 flex flex-col ${highlight ? 'ring-2 ring-accent/50 dark:ring-accent/40' : ''}`}
                 >
                   {highlight && (
-                    <div className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 uppercase tracking-wide mb-3">
+                    <div className="text-xs font-semibold text-brand-navy dark:text-accent uppercase tracking-wide mb-3">
                       Mest populær
                     </div>
                   )}
@@ -247,7 +247,7 @@ export default function LandingPage() {
                   <ul className="space-y-2 flex-1 mb-6">
                     {features.map((f) => (
                       <li key={f} className="flex items-center gap-2 text-sm text-slate-600 dark:text-zinc-400">
-                        <ChevronRight className="w-3.5 h-3.5 text-indigo-500 flex-shrink-0" />
+                        <ChevronRight className="w-3.5 h-3.5 text-accent flex-shrink-0" />
                         {f}
                       </li>
                     ))}
@@ -297,10 +297,10 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400 dark:text-zinc-600">
           <span>© {new Date().getFullYear()} Coas — Din AI-assistent</span>
           <div className="flex gap-5">
-            <a href="#" className="hover:text-indigo-500 transition-colors">Privatlivspolitik</a>
-            <a href="#" className="hover:text-indigo-500 transition-colors">Vilkår</a>
-            <a href="/afmeld" className="hover:text-indigo-500 transition-colors">Afmeld emails</a>
-            <a href="mailto:hej@ahmes.dk" className="hover:text-indigo-500 transition-colors">hej@ahmes.dk</a>
+            <a href="#" className="hover:text-accent transition-colors">Privatlivspolitik</a>
+            <a href="#" className="hover:text-accent transition-colors">Vilkår</a>
+            <a href="/afmeld" className="hover:text-accent transition-colors">Afmeld emails</a>
+            <a href="mailto:hej@ahmes.dk" className="hover:text-accent transition-colors">hej@ahmes.dk</a>
           </div>
         </div>
       </footer>

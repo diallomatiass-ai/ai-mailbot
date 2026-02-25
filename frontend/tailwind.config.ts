@@ -15,9 +15,15 @@ const config: Config = {
           border: '#27272a',
         },
         accent: {
-          DEFAULT: '#6366f1',
-          hover: '#818cf8',
-          muted: 'rgba(99, 102, 241, 0.15)',
+          DEFAULT: '#42D1B9',
+          hover: '#2ABBA4',
+          muted: 'rgba(66, 209, 185, 0.15)',
+        },
+        brand: {
+          navy: '#162249',
+          'navy-hover': '#1e2d6b',
+          teal: '#42D1B9',
+          'teal-dark': '#26898F',
         },
       },
       keyframes: {

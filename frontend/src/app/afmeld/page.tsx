@@ -51,7 +51,7 @@ export default function AfmeldPage() {
     <div className="min-h-screen bg-slate-50 dark:bg-[#09090b] flex flex-col items-center justify-center px-6">
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-indigo-500/6 blur-[140px]" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-accent/6 blur-[140px]" />
       </div>
 
       <div className="relative z-10 w-full max-w-md animate-slideUp">
@@ -81,7 +81,7 @@ export default function AfmeldPage() {
               </p>
               <p className="text-xs text-slate-400 dark:text-zinc-600 mt-4">
                 Fortryder du?{' '}
-                <a href="mailto:hej@ahmes.dk" className="text-indigo-500 hover:underline">
+                <a href="mailto:hej@ahmes.dk" className="text-accent hover:underline">
                   Skriv til os
                 </a>
                 .
@@ -137,7 +137,7 @@ export default function AfmeldPage() {
 
         <p className="text-center text-xs text-slate-400 dark:text-zinc-600 mt-6">
           Coas · GDPR-venlig dansk tjeneste ·{' '}
-          <a href="mailto:hej@ahmes.dk" className="hover:text-indigo-500 transition-colors">
+          <a href="mailto:hej@ahmes.dk" className="hover:text-accent transition-colors">
             hej@ahmes.dk
           </a>
         </p>

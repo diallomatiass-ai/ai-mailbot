@@ -44,8 +44,8 @@ export default function GratisPage() {
     <div className="min-h-screen bg-slate-50 dark:bg-[#09090b]">
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[700px] rounded-full bg-indigo-500/8 blur-[160px]" />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[400px] rounded-full bg-purple-500/6 blur-[130px]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[700px] rounded-full bg-accent/8 blur-[160px]" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[400px] rounded-full bg-brand-teal/10 blur-[130px]" />
         <div
           className="absolute inset-0 opacity-[0.025]"
           style={{
@@ -80,7 +80,7 @@ export default function GratisPage() {
           {/* Venstre: Marketing copy */}
           <div className="space-y-8 animate-slideUp">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20 text-indigo-700 dark:text-indigo-400 text-sm font-medium">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 dark:bg-accent/10 border border-accent/30 dark:border-accent/20 text-brand-navy dark:text-accent text-sm font-medium">
               <Star className="w-3.5 h-3.5 fill-current" />
               14 dages gratis prøve · Ingen kreditkort
             </div>
@@ -89,7 +89,7 @@ export default function GratisPage() {
             <div className="space-y-4">
               <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-zinc-50 leading-tight">
                 Spar 50 minutter
-                <span className="block bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                <span className="block bg-gradient-to-r from-brand-navy to-brand-teal bg-clip-text text-transparent">
                   om dagen på mails
                 </span>
               </h1>
@@ -107,7 +107,7 @@ export default function GratisPage() {
                 'Annullér når som helst',
               ].map((item) => (
                 <div key={item} className="flex items-center gap-1.5">
-                  <CheckCircle className="w-4 h-4 text-indigo-500 flex-shrink-0" />
+                  <CheckCircle className="w-4 h-4 text-accent flex-shrink-0" />
                   {item}
                 </div>
               ))}
@@ -133,8 +133,8 @@ export default function GratisPage() {
                 },
               ].map(({ icon: Icon, title, desc }) => (
                 <div key={title} className="flex gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center">
-                    <Icon className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-teal-50 dark:bg-accent/10 flex items-center justify-center">
+                    <Icon className="w-5 h-5 text-brand-navy dark:text-accent" />
                   </div>
                   <div>
                     <p className="font-semibold text-slate-800 dark:text-zinc-200 text-sm">{title}</p>
@@ -146,7 +146,7 @@ export default function GratisPage() {
 
             {/* Social proof placeholder */}
             <div className="glass-card p-4 flex items-start gap-3">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex-shrink-0" />
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-brand-navy to-brand-teal flex-shrink-0" />
               <div>
                 <p className="text-sm text-slate-700 dark:text-zinc-300 italic">
                   "Vi brugte 1 time om dagen på mails. Nu tager det 5 minutter. Ingen eksaggration."
@@ -274,9 +274,9 @@ export default function GratisPage() {
                   <Lock className="w-3 h-3" />
                   <span>
                     Sikker forbindelse · Vi deler aldrig dine data ·{' '}
-                    <a href="#" className="text-indigo-500 hover:underline">Vilkår</a>
+                    <a href="#" className="text-accent hover:underline">Vilkår</a>
                     {' '}·{' '}
-                    <a href="#" className="text-indigo-500 hover:underline">Privatlivspolitik</a>
+                    <a href="#" className="text-accent hover:underline">Privatlivspolitik</a>
                   </span>
                 </div>
               </div>
@@ -311,7 +311,7 @@ export default function GratisPage() {
               },
             ].map(({ step, title, desc }) => (
               <div key={step} className="glass-card p-6 text-center">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-brand-navy to-brand-teal flex items-center justify-center text-white font-bold text-lg mx-auto mb-4">
                   {step}
                 </div>
                 <h3 className="font-semibold text-slate-800 dark:text-zinc-200 mb-2">{title}</h3>
@@ -339,9 +339,9 @@ export default function GratisPage() {
       {/* Footer */}
       <footer className="relative z-10 border-t border-slate-200 dark:border-zinc-800 mt-16 py-8 text-center text-xs text-slate-400 dark:text-zinc-600">
         © {new Date().getFullYear()} Coas · Din AI-assistent ·{' '}
-        <a href="#" className="hover:text-indigo-500 transition-colors">Privatlivspolitik</a>
+        <a href="#" className="hover:text-accent transition-colors">Privatlivspolitik</a>
         {' '}·{' '}
-        <a href="/afmeld" className="hover:text-indigo-500 transition-colors">Afmeld emails</a>
+        <a href="/afmeld" className="hover:text-accent transition-colors">Afmeld emails</a>
       </footer>
     </div>
   )
@@ -360,7 +360,7 @@ function SuccessState({ name }: { name: string }) {
         Din konto er oprettet. Du sendes videre til dashboardet om et øjeblik
         — tilslut din mailkonto for at komme i gang.
       </p>
-      <div className="w-5 h-5 border-2 border-indigo-300 border-t-indigo-600 rounded-full animate-spin mx-auto" />
+      <div className="w-5 h-5 border-2 border-accent/40 border-t-brand-navy rounded-full animate-spin mx-auto" />
     </div>
   )
 }

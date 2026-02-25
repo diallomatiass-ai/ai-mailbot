@@ -36,8 +36,8 @@ export default function VideoPage({ params }: Props) {
     <div className="min-h-screen bg-slate-50 dark:bg-[#09090b]">
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] rounded-full bg-indigo-500/8 blur-[150px]" />
-        <div className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] rounded-full bg-purple-500/5 blur-[120px]" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] rounded-full bg-accent/8 blur-[150px]" />
+        <div className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] rounded-full bg-brand-teal/10 blur-[120px]" />
       </div>
 
       {/* Nav */}
@@ -55,7 +55,7 @@ export default function VideoPage({ params }: Props) {
       <main className="relative z-10 max-w-2xl mx-auto px-6 py-8 animate-slideUp">
         {/* Personaliseret hilsen */}
         <div className="text-center mb-8 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20 text-indigo-700 dark:text-indigo-400 text-xs font-medium">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-teal-50 dark:bg-accent/10 border border-accent/30 dark:border-accent/20 text-brand-navy dark:text-accent text-xs font-medium">
             <Clock className="w-3.5 h-3.5" />
             90 sekunder · Lavet specielt til dig
           </div>
@@ -82,7 +82,7 @@ export default function VideoPage({ params }: Props) {
             // Placeholder — vises indtil VIDEO_EMBED_URL er sat
             <div className="aspect-video bg-gradient-to-br from-slate-100 to-slate-200 dark:from-zinc-800 dark:to-zinc-900 flex flex-col items-center justify-center gap-4">
               <div className="w-16 h-16 rounded-full bg-white dark:bg-zinc-700 shadow-lg flex items-center justify-center">
-                <Play className="w-7 h-7 text-indigo-600 dark:text-indigo-400 ml-1" />
+                <Play className="w-7 h-7 text-brand-navy dark:text-accent ml-1" />
               </div>
               <div className="text-center">
                 <p className="text-sm font-medium text-slate-600 dark:text-zinc-400">
@@ -110,7 +110,7 @@ export default function VideoPage({ params }: Props) {
               'Al data forbliver lokalt — 100% GDPR-venlig, ingen cloud',
             ].map((item) => (
               <li key={item} className="flex items-start gap-3 text-sm text-slate-600 dark:text-zinc-400">
-                <CheckCircle className="w-4 h-4 text-indigo-500 flex-shrink-0 mt-0.5" />
+                <CheckCircle className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
                 {item}
               </li>
             ))}
@@ -131,7 +131,7 @@ export default function VideoPage({ params }: Props) {
             <p className="text-2xl font-bold text-slate-900 dark:text-zinc-100">
               499 <span className="text-base font-normal">kr/md</span>
             </p>
-            <p className="text-xs text-indigo-600 dark:text-indigo-400 font-medium">
+            <p className="text-xs text-brand-navy dark:text-accent font-medium">
               De første 14 dage er gratis
             </p>
           </div>
@@ -157,7 +157,7 @@ export default function VideoPage({ params }: Props) {
             Spørgsmål? Skriv direkte til{' '}
             <a
               href="mailto:hej@ahmes.dk"
-              className="text-indigo-500 hover:underline"
+              className="text-accent hover:underline"
             >
               hej@ahmes.dk
             </a>{' '}

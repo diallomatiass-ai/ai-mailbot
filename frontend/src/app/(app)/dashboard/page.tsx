@@ -76,12 +76,12 @@ export default function Dashboard() {
       {/* Stats-kort */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard
-          icon={<Mail className="w-5 h-5 text-indigo-500" />}
-          bg="bg-indigo-50 dark:bg-indigo-500/10"
+          icon={<Mail className="w-5 h-5 text-accent" />}
+          bg="bg-teal-50 dark:bg-accent/10"
           label="Ulæste"
           value={dash?.unread ?? '—'}
           href="/inbox"
-          accent="border-indigo-500"
+          accent="border-accent"
         />
         <StatCard
           icon={<AlertTriangle className="w-5 h-5 text-red-500" />}
@@ -92,12 +92,12 @@ export default function Dashboard() {
           accent="border-red-500"
         />
         <StatCard
-          icon={<Sparkles className="w-5 h-5 text-purple-500" />}
-          bg="bg-purple-50 dark:bg-purple-500/10"
+          icon={<Sparkles className="w-5 h-5 text-accent" />}
+          bg="bg-teal-50 dark:bg-accent/10"
           label="AI-forslag afventer"
           value={dash?.pending_suggestions ?? '—'}
           href="/inbox"
-          accent="border-purple-500"
+          accent="border-accent"
         />
         <StatCard
           icon={<TrendingUp className="w-5 h-5 text-emerald-500" />}
@@ -117,7 +117,7 @@ export default function Dashboard() {
               <AlertTriangle className="w-4 h-4 text-red-500" />
               Emails der haster
             </h2>
-            <Link href="/inbox" className="text-xs text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+            <Link href="/inbox" className="text-xs text-accent hover:text-brand-navy dark:hover:text-accent transition-colors">
               Se alle →
             </Link>
           </div>
@@ -138,7 +138,7 @@ export default function Dashboard() {
                       <p className="text-xs text-slate-400 dark:text-zinc-600 truncate">{e.from_address}</p>
                     </div>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-slate-300 dark:text-zinc-700 group-hover:text-indigo-400 transition-colors flex-shrink-0 ml-2" />
+                  <ChevronRight className="w-4 h-4 text-slate-300 dark:text-zinc-700 group-hover:text-accent transition-colors flex-shrink-0 ml-2" />
                 </Link>
               ))}
             </div>
@@ -165,9 +165,9 @@ export default function Dashboard() {
                     <div key={cat} className="flex items-center justify-between">
                       <span className="text-sm text-slate-600 dark:text-zinc-400 capitalize">{cat}</span>
                       <div className="flex items-center gap-2">
-                        <div className="h-1.5 bg-indigo-100 dark:bg-indigo-500/20 rounded-full w-16 overflow-hidden">
+                        <div className="h-1.5 bg-teal-100 dark:bg-accent/20 rounded-full w-16 overflow-hidden">
                           <div
-                            className="h-full bg-indigo-500 dark:bg-indigo-400 rounded-full"
+                            className="h-full bg-accent dark:bg-accent rounded-full"
                             style={{ width: `${Math.min(100, (count / (stats?.total || 1)) * 100)}%` }}
                           />
                         </div>

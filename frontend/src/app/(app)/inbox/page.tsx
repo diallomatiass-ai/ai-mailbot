@@ -82,7 +82,7 @@ export default function InboxPage() {
   const pillClass = (active: boolean) =>
     `px-3 py-1 text-xs font-medium rounded-full border transition-all ${
       active
-        ? 'bg-indigo-50 dark:bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-500/30'
+        ? 'bg-teal-50 dark:bg-accent/15 text-brand-navy dark:text-accent border-accent/30 dark:border-accent/30'
         : 'bg-transparent text-slate-500 dark:text-zinc-500 border-slate-200 dark:border-zinc-800 hover:border-slate-300 dark:hover:border-zinc-700 hover:text-slate-700 dark:hover:text-zinc-300'
     }`
 
@@ -136,7 +136,7 @@ export default function InboxPage() {
                     <button
                       onClick={handleGenerate}
                       disabled={generating}
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white disabled:opacity-50 transition-colors"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg bg-brand-navy hover:bg-brand-navy-hover text-white disabled:opacity-50 transition-colors"
                     >
                       {generating ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
                       {generating ? 'Genererer...' : 'Generer'}
@@ -177,7 +177,7 @@ export default function InboxPage() {
                       {selectedEmail.confidence != null && (
                         <div className="flex justify-between">
                           <span className="text-slate-400 dark:text-zinc-600">{t('confidence')}</span>
-                          <span className="font-medium text-indigo-600 dark:text-indigo-400">{Math.round(selectedEmail.confidence * 100)}%</span>
+                          <span className="font-medium text-brand-navy dark:text-accent">{Math.round(selectedEmail.confidence * 100)}%</span>
                         </div>
                       )}
                     </div>

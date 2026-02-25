@@ -49,8 +49,8 @@ export default function AiSuggestionCard({ suggestion, onAction, onSend }: Props
     <div className="gradient-border p-4">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <div className="p-1 rounded bg-indigo-50 dark:bg-indigo-500/10">
-            <Bot className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+          <div className="p-1 rounded bg-teal-50 dark:bg-accent/10">
+            <Bot className="w-4 h-4 text-brand-navy dark:text-accent" />
           </div>
           <span className="text-sm font-medium text-slate-700 dark:text-zinc-300">{t('aiSuggestion')}</span>
         </div>
@@ -76,7 +76,7 @@ export default function AiSuggestionCard({ suggestion, onAction, onSend }: Props
                     <Check className="w-3.5 h-3.5" /> {t('approve')}
                   </button>
                   <button onClick={() => setEditing(true)} disabled={loading}
-                    className="flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 text-xs font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-500/20 disabled:opacity-50 transition-all">
+                    className="flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 text-xs font-medium text-brand-navy dark:text-accent bg-teal-50 dark:bg-accent/10 border border-accent/30 dark:border-accent/20 rounded-lg hover:bg-teal-100 dark:hover:bg-accent/20 disabled:opacity-50 transition-all">
                     <Pencil className="w-3.5 h-3.5" /> {t('edit')}
                   </button>
                   <button onClick={() => handleAction('reject')} disabled={loading}
@@ -85,7 +85,7 @@ export default function AiSuggestionCard({ suggestion, onAction, onSend }: Props
                   </button>
                 </div>
                 <button onClick={() => setChatOpen(!chatOpen)} disabled={loading}
-                  className="w-full flex items-center justify-center gap-1.5 px-2 py-1.5 text-xs font-medium text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-500/10 border border-purple-200 dark:border-purple-500/20 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-500/20 disabled:opacity-50 transition-all">
+                  className="w-full flex items-center justify-center gap-1.5 px-2 py-1.5 text-xs font-medium text-brand-navy dark:text-accent bg-teal-50 dark:bg-accent/10 border border-accent/20 dark:border-accent/20 rounded-lg hover:bg-accent/10 dark:hover:bg-accent/20 disabled:opacity-50 transition-all">
                   <MessageSquare className="w-3.5 h-3.5" /> {t('refineWithAi')}
                 </button>
               </>
@@ -105,11 +105,11 @@ export default function AiSuggestionCard({ suggestion, onAction, onSend }: Props
           {chatOpen && (
             <div className="mt-3 pt-3 border-t border-slate-200 dark:border-white/[0.06]">
               <div className="flex items-center gap-2 mb-2">
-                <Sparkles className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
-                <span className="text-xs font-medium text-purple-600 dark:text-purple-400">{t('refineTitle')}</span>
+                <Sparkles className="w-3.5 h-3.5 text-brand-navy dark:text-accent" />
+                <span className="text-xs font-medium text-brand-navy dark:text-accent">{t('refineTitle')}</span>
               </div>
               {refinedText && (
-                <div className="bg-purple-50 dark:bg-purple-500/5 border border-purple-200 dark:border-purple-500/15 rounded-lg p-3 mb-3">
+                <div className="bg-teal-50 dark:bg-brand-teal/10 border border-accent/20 dark:border-accent/15 rounded-lg p-3 mb-3">
                   <p className="text-sm text-slate-700 dark:text-zinc-300 whitespace-pre-wrap">{refinedText}</p>
                   <div className="flex gap-2 mt-2">
                     <button onClick={handleApplyRefined} disabled={loading}
@@ -127,9 +127,9 @@ export default function AiSuggestionCard({ suggestion, onAction, onSend }: Props
                 <input type="text" value={chatPrompt} onChange={(e) => setChatPrompt(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleRefine()}
                   placeholder={t('refinePlaceholder')} disabled={refining}
-                  className="flex-1 px-3 py-2 text-sm bg-slate-50 dark:bg-zinc-900/50 border border-slate-200 dark:border-white/[0.08] rounded-lg text-slate-800 dark:text-zinc-200 placeholder:text-slate-400 dark:placeholder:text-zinc-600 focus:outline-none focus:border-purple-400 dark:focus:border-purple-500/40 focus:ring-1 focus:ring-purple-200 dark:focus:ring-purple-500/20 disabled:opacity-50 transition-all" />
+                  className="flex-1 px-3 py-2 text-sm bg-slate-50 dark:bg-zinc-900/50 border border-slate-200 dark:border-white/[0.08] rounded-lg text-slate-800 dark:text-zinc-200 placeholder:text-slate-400 dark:placeholder:text-zinc-600 focus:outline-none focus:border-accent/60 dark:focus:border-accent/40 focus:ring-1 focus:ring-accent/20 dark:focus:ring-accent/20 disabled:opacity-50 transition-all" />
                 <button onClick={handleRefine} disabled={refining || !chatPrompt.trim()}
-                  className="flex items-center gap-1.5 px-3 py-2 text-sm text-purple-600 dark:text-purple-300 bg-purple-50 dark:bg-purple-500/15 border border-purple-200 dark:border-purple-500/25 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-500/25 disabled:opacity-50 transition-all">
+                  className="flex items-center gap-1.5 px-3 py-2 text-sm text-brand-navy dark:text-accent bg-teal-50 dark:bg-accent/15 border border-accent/20 dark:border-accent/25 rounded-lg hover:bg-accent/10 dark:hover:bg-accent/25 disabled:opacity-50 transition-all">
                   {refining ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                 </button>
               </div>
