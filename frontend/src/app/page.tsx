@@ -19,7 +19,7 @@ export default function LandingPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#09090b]">
+    <div className="min-h-screen bg-white dark:bg-[#09090b]">
       {/* Baggrunds-effekter */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[700px] rounded-full bg-accent/8 blur-[160px]" />
@@ -40,9 +40,9 @@ export default function LandingPage() {
           <Image
             src={theme === 'dark' ? '/logo-dark.png' : '/logo.png'}
             alt="Coas"
-            width={110}
-            height={33}
-            className="object-contain"
+            width={160}
+            height={124}
+            className="object-contain h-10 w-auto"
             priority
           />
           <div className="flex items-center gap-3">

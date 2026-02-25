@@ -48,7 +48,7 @@ export default function AfmeldPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#09090b] flex flex-col items-center justify-center px-6">
+    <div className="min-h-screen bg-white dark:bg-[#09090b] flex flex-col items-center justify-center px-6">
       {/* Background */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-accent/6 blur-[140px]" />
@@ -60,9 +60,9 @@ export default function AfmeldPage() {
           <Image
             src={theme === 'dark' ? '/logo-dark.png' : '/logo.png'}
             alt="Coas"
-            width={100}
-            height={30}
-            className="object-contain opacity-60"
+            width={160}
+            height={124}
+            className="object-contain h-10 w-auto opacity-60"
           />
         </div>
 

@@ -38,7 +38,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-[#09090b] px-4 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#09090b] px-4 relative overflow-hidden">
       {/* Background grid */}
       <div
         className="absolute inset-0 opacity-[0.03]"
