@@ -52,14 +52,14 @@ export default function LoginPage() {
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-accent/10 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/3 w-[300px] h-[300px] rounded-full bg-brand-teal/10 blur-[100px] pointer-events-none" />
 
-      <div className="w-full max-w-md relative z-10 animate-slideUp">
+      <div className="w-full max-w-lg relative z-10 animate-slideUp">
         <div className="flex flex-col items-center mb-8">
           <Image
             src={theme === 'dark' ? '/logo-dark.png' : '/logo.png'}
             alt="Coas"
-            width={240}
-            height={144}
-            className="object-contain"
+            width={420}
+            height={327}
+            className="object-contain w-full max-w-sm"
             priority
           />
         </div>
