@@ -57,13 +57,13 @@ export default function GratisPage() {
       </div>
 
       {/* Nav */}
-      <nav className="relative z-10 flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
+      <nav className="relative z-10 flex items-center justify-between px-6 py-3 max-w-6xl mx-auto">
         <Image
           src={theme === 'dark' ? '/logo-dark.png' : '/logo.png'}
           alt="Coas"
-          width={160}
-          height={124}
-          className="object-contain h-10 w-auto"
+          width={640}
+          height={497}
+          className="object-contain h-64 w-auto"
           priority
         />
         <Link

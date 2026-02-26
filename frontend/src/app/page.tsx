@@ -35,14 +35,14 @@ export default function LandingPage() {
       </div>
 
       {/* Nav */}
-      <nav className="relative z-10 border-b border-slate-200/60 dark:border-white/[0.05] bg-white/70 dark:bg-zinc-950/70 backdrop-blur-xl">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <nav className="relative z-10 bg-white/70 dark:bg-zinc-950/70 backdrop-blur-xl">
+        <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
           <Image
             src={theme === 'dark' ? '/logo-dark.png' : '/logo.png'}
             alt="Coas"
-            width={160}
-            height={124}
-            className="object-contain h-10 w-auto"
+            width={640}
+            height={497}
+            className="object-contain h-64 w-auto"
             priority
           />
           <div className="flex items-center gap-3">

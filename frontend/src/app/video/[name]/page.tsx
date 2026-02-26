@@ -41,13 +41,13 @@ export default function VideoPage({ params }: Props) {
       </div>
 
       {/* Nav */}
-      <nav className="relative z-10 flex items-center justify-center px-6 py-5">
+      <nav className="relative z-10 flex items-center justify-center px-6 py-3">
         <Image
           src={theme === 'dark' ? '/logo-dark.png' : '/logo.png'}
           alt="Coas"
-          width={160}
-          height={124}
-          className="object-contain h-10 w-auto"
+          width={640}
+          height={497}
+          className="object-contain h-64 w-auto"
           priority
         />
       </nav>
